@@ -1,0 +1,52 @@
+body {
+  font: 22px "Inter", sans-serif;
+  margin: 0;
+}
+
+#ui {
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  box-sizing: border-box;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0px 20px;
+  user-select: none;
+}
+
+#paused {
+  display: none;
+  flex-direction: column;
+  line-height: 1.4em;
+  font-size: 18px;
+  position: absolute;
+  text-align: center;
+  top: 50%;  /* position the top  edge of the element at the middle of the parent */
+  left: 50%; /* position the left edge of the element at the middle of the parent */
+  transform: translate(-50%, -50%); /* This is a shorthand of
+                                       translateX(-50%) and translateY(-50%) */
+}
+
+#paused #title {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+#ui:not(:focus) {
+  border: 3px solid #FAA1A1;
+}
+
+#ui:not(:focus) #paused {
+  display: flex;
+}
+
+#loom {
+  height: 300px;
+  width: 400px;
+  border: 1px solid black;
+}
+
+#planetImg {
+  height: 64px;
+  width: 64px;
+}

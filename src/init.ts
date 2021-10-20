@@ -1,6 +1,6 @@
 import { Planets } from './planets'
 import { onButtonsPressed } from './buttons'
-import { getPlayer, getWorldNode, setPlayer, setWorldNode, setWorldRectangle } from './lib'
+import { getMultiplayerPlayers, getPlayer, getWorldNode, setMultiplayerPlayers, setPlayer, setWorldNode, setWorldRectangle } from './lib'
 import { Player } from './player'
 
 // Return true if initializing as the server
@@ -57,14 +57,30 @@ const sharedSetup = (worldNode: FrameNode) => {
   setPlayer(player)
   worldNode.appendChild(player.getNode())
 
+  /* Load test */
+  const loadTestPlayers: Player[] = []
+  for (let i = 0; i < 100; i++) {
+    const loadTestPlayer = new Player({x: Math.random() * 500, y: Math.random() * 500})
+    loadTestPlayers.push(loadTestPlayer)
+    worldNode.appendChild(loadTestPlayer.getNode())
+  }
+  setMultiplayerPlayers(loadTestPlayers)
+
+
   const pastSelection: string[] = figma.currentPage.selection.map(n => n.id)
   figma.currentPage.selection = []
-  figma.ui.onmessage = (m) => onButtonsPressed(m, getPlayer().buttonsPressed)
+  // figma.ui.onmessage = (m) => onButtonsPressed(m, getPlayer().buttonsPressed)
+
+  figma.ui.onmessage = (m) => {
+    onButtonsPressed(m, getPlayer().buttonsPressed)
+    for (const p of getMultiplayerPlayers()) {
+      onButtonsPressed(m, p.buttonsPressed)
+    }
+  }
 
 
   figma.on("close", () => {
     figma.currentPage.selection = pastSelection.map(id => figma.getNodeById(id)).filter(n => !!n) as SceneNode[]
-    !getPlayer().getProjectileFrameNode().removed && getPlayer().getProjectileFrameNode().remove()
     !getPlayer().getNode().removed && getPlayer().getNode().remove()
 
     if (!getWorldNode().removed && !getWorldNode().findChild(c => c.name === "🚀")) {

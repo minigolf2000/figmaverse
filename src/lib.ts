@@ -47,11 +47,15 @@ export function loopAround(position: Vector) {
 }
 
 let currentCenter: Vector = figma.viewport.center
-export function updateCamera(playerMidpoint: Midpoint, cameraBoxSize: number) {
+export function updateCamera(player: Player, cameraBoxSize: number) {
+  const midpoint = player.getCurrentMidpoint()
+  if (!midpoint) {
+    return
+  }
   // TODO: does this take link's width/height into account?
   const distFromCenter = cameraBoxSize / 3.5
-  const currentX = playerMidpoint.x + worldRectangle.x
-  const currentY = playerMidpoint.y + worldRectangle.y
+  const currentX = midpoint.x + worldRectangle.x
+  const currentY = midpoint.y + worldRectangle.y
 
   let newX = currentCenter.x
   if (currentCenter.x - currentX > distFromCenter) {
@@ -94,23 +98,16 @@ export function isOverlapping(midpointA: Midpoint, midpointB: Midpoint) {
   return distance(midpointA, midpointB) < (midpointA.diameter + midpointB.diameter) / 2
 }
 
-let mp: FrameNode[] = []
+let mp: Player[] = []
 export function getMultiplayerPlayers() {
   return mp
 }
 
-export function setMultiplayerPlayers(m: FrameNode[]) {
+export function setMultiplayerPlayers(m: Player[]) {
   mp = m
-}
-
-function guidToSessionId(guid: string) {
-  return parseInt(guid.substring(0, guid.indexOf(":")));
 }
 
 // TODO: this can be combined with scanForNewMultiplayerPlayers for performance
 export function isHost() {
-  const mySessionId = guidToSessionId(getPlayer().getNode().id)
-  return !getMultiplayerPlayers().find((p: FrameNode) =>
-    guidToSessionId(p.id) < mySessionId
-  )
+  return true
 }

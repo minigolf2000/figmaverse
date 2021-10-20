@@ -14,18 +14,18 @@ export class Planets {
     const blackHoles: BlackHole[] = []
     nodes.forEach((n: SceneNode) => {
       const name = n.name
-      if (name.startsWith("out")) {
+      if (name.startsWith("⚪")) {
         const whiteHole = new WhiteHole(n)
         this.planets.push(whiteHole)
-        whiteHoles[name.substring(3)] = whiteHole.getCurrentMidpoint()
+        whiteHoles[name.substring(1)] = whiteHole.getCurrentMidpoint()
         return
       }
-      if (name.startsWith("in")) {
+      if (name.startsWith("⚫")) {
         const blackHole = new BlackHole(n)
         this.planets.push(blackHole)
         blackHoles.push(blackHole)
       }
-      if (name === "🚀" || name.startsWith("_") || name === "·" || name === "projectile-container") {
+      if (name === "🚀" || name.startsWith("_") || name === "·") {
         return
       }
 
@@ -33,7 +33,7 @@ export class Planets {
     })
 
     for (const blackHole of blackHoles) {
-      blackHole.setExit(whiteHoles[blackHole.getNode().name.substring(2)])
+      blackHole.setExit(whiteHoles[blackHole.getNode().name.substring(1)])
     }
     a = this
   }

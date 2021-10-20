@@ -1,4 +1,4 @@
-import { getWorldNode, loopAround, updateCamera } from "./lib"
+import { getWorldNode, loopAround } from "./lib"
 import { Buttons } from "./buttons"
 import { Midpoint } from "./lib"
 import { add, distance, magnitude, setMagnitude, normalize } from "./vector"
@@ -28,13 +28,11 @@ export class Player {
   private thrustNode: RectangleNode
   private deathTimer: number | null = null
   private color: RGB
-  private projectileFrameNode: FrameNode
-  private numLives: number = 4
 
   private thrustLastFlickeredOn = false
   private currentMidpoint: Midpoint // repeatedly accessing Figma node objects is slow. store this value locally
 
-  public constructor() {
+  public constructor(positionOffset: Vector = {x: 0, y: 0}) {
     this.node = figma.createNodeFromSvg(`
     <svg width="16" height="20" viewBox="0 0 16 20" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path d="M10.2897 13L8 18.6656L5.71027 13L10.2897 13Z" fill="#010101" stroke="white" stroke-linecap="square"/>
@@ -59,35 +57,23 @@ export class Player {
     this.node.name = "🚀"
     this.node.locked = true
 
-    this.projectileFrameNode = figma.createFrame()
-    this.projectileFrameNode.name = "projectile-container"
-    this.projectileFrameNode.fills = []
-    this.projectileFrameNode.resize(1, 1)
-    this.projectileFrameNode.clipsContent = false
-    this.projectileFrameNode.locked = true
-    getWorldNode().appendChild(this.projectileFrameNode)
-
-    this.newShip()
+    this.newShip(positionOffset)
   }
 
-  private newShip() {
+  private newShip(positionOffset: Vector = {x: 0, y: 0}) {
     const { width, height } = getWorldNode()
     this.velocity = {x: 0, y: 0}
     this.node.rotation = 0
     // X and Y actually represent the top-left of the player's spaceship
-    this.node.x = width / 2 + Math.random() * 50 - 25
+    this.node.x = width / 2 + Math.random() * 50 - 25 + positionOffset.x
     // y position is purposefully moved 75px up so that plugin window starting position does not obscure ship
-    this.node.y = height / 2 + Math.random() * 25 - 100
+    this.node.y = height / 2 + Math.random() * 25 - 100 + positionOffset.y
     this.currentMidpoint = {x: this.node.x, y: this.node.y, diameter: SPACESHIP_SIZE, rotation: 0}
-    figma.ui.postMessage({numLives: this.numLives, color: this.color})
+    figma.ui.postMessage({color: this.color})
   }
 
   public getNode() {
     return this.node
-  }
-
-  public getProjectileFrameNode() {
-    return this.projectileFrameNode
   }
 
   public getCurrentMidpoint(): Midpoint | null {
@@ -120,18 +106,6 @@ export class Player {
   }
 
   public nextFrame() {
-    if (this.deathTimer !== null) {
-      if (this.deathTimer > 100 && this.numLives > 0) {
-        this.numLives--
-        this.newShip()
-        this.node.visible = true
-        this.deathTimer = null
-        return true
-      }
-      this.deathTimer++
-      return false
-    }
-
     if (!this.node.visible) { // your ship can be marked invisible by other clients if they shoot you
       this.deathTimer = 0
       figma.ui.postMessage({death: true})
@@ -173,7 +147,7 @@ export class Player {
     if (!playerCollided) {
       this.setCurrentPosition(loopAround(newPos))
     }
-    updateCamera(this.currentMidpoint, 2)
+
 
     return true
   }

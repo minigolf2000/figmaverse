@@ -1,5 +1,5 @@
 import { init } from './init'
-import { FPS, getPlayer, getWorldNode } from './lib'
+import { FPS, getMultiplayerPlayers, getPlayer, getWorldNode, updateCamera } from './lib'
 import { Planet } from './planet'
 import { getPlanets } from './planets'
 import { Player } from './player'
@@ -19,7 +19,11 @@ function nextFrame() {
   }
 
   player.nextFrame()
+  for (const p of getMultiplayerPlayers()) {
+    p.nextFrame()
+  }
 
+  updateCamera(player, 200)
   updateLoomUrl(player)
 }
 

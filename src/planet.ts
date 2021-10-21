@@ -21,7 +21,17 @@ export class Planet {
     this.node = node
     this.radius = this.node.width / 2
     this.gravity = this.radius
-    this.embedUrl = node.name.includes(" | ") ? node.name.substr(node.name.indexOf(" | ") + 3) : ""
+
+    if ('children' in node) {
+      const textWithHyperlink = node.findChild(n => n.type === 'TEXT' && (n as any).hyperlink) as any
+      if (textWithHyperlink) {
+        console.log(textWithHyperlink.type)
+        if (textWithHyperlink.type === "TEXT" && textWithHyperlink.hyperlink.type === "URL") {
+          this.embedUrl = textWithHyperlink.hyperlink.value
+          console.log(this.embedUrl)
+        }
+      }
+    }
   }
 
   public getNode() {

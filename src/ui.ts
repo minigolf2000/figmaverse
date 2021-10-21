@@ -35,7 +35,7 @@ onmessage = (event) => {
     currentEmbedUrl = embedUrl
     const iframe = document.getElementById("loom") as HTMLIFrameElement
     if (iframe) {
-      iframe.src = `https://www.loom.com/embed/${embedUrl}`
+      iframe.src = embedUrl
     }
     const planetImg = document.getElementById("planetImg") as HTMLImageElement
     if (planetImg) {

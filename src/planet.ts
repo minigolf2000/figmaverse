@@ -24,12 +24,8 @@ export class Planet {
 
     if ('children' in node) {
       const textWithHyperlink = node.findChild(n => n.type === 'TEXT' && (n as any).hyperlink) as any
-      if (textWithHyperlink) {
-        console.log(textWithHyperlink.type)
-        if (textWithHyperlink.type === "TEXT" && textWithHyperlink.hyperlink.type === "URL") {
-          this.embedUrl = textWithHyperlink.hyperlink.value
-          console.log(this.embedUrl)
-        }
+      if (textWithHyperlink?.type === "TEXT" && textWithHyperlink?.hyperlink.type === "URL") {
+        this.embedUrl = textWithHyperlink.hyperlink.value
       }
     }
   }

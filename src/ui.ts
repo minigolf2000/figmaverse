@@ -20,7 +20,7 @@ uiEl.onfocus = () => {
 let currentEmbedUrl = ""
 onmessage = (event) => {
   if (!event.data.pluginMessage) { return }
-  const { color, embedUrl, planetImgArray } = event.data.pluginMessage
+  const { color, rotation, embedUrl, planetImgArray } = event.data.pluginMessage
 
   if (color !== undefined) {
     const shipNode = document.getElementById("ship")
@@ -28,6 +28,14 @@ onmessage = (event) => {
       const {r, g, b} = color
       const pathNode = shipNode.children[0] as SVGElement
       pathNode.style.fill = `rgb(${r*255},${g*255},${b*255})`
+
+    }
+  }
+
+  if (rotation !== undefined) {
+    const shipNode = document.getElementById("ship")
+    if (shipNode) {
+      shipNode.style.transform = `rotate(-${rotation}deg)`
     }
   }
 

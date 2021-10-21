@@ -69,7 +69,7 @@ export class Player {
     // y position is purposefully moved 75px up so that plugin window starting position does not obscure ship
     this.node.y = height / 2 + Math.random() * 25 - 100 + positionOffset.y
     this.currentMidpoint = {x: this.node.x, y: this.node.y, diameter: SPACESHIP_SIZE, rotation: 0}
-    figma.ui.postMessage({color: this.color})
+    figma.ui.postMessage({color: this.color, rotation: 0})
   }
 
   public getNode() {
@@ -114,13 +114,16 @@ export class Player {
 
     if (this.buttonsPressed.left) {
       this.currentMidpoint.rotation += TURN_SPEED
+      if (this.currentMidpoint.rotation > 360) this.currentMidpoint.rotation -= 360
     }
     if (this.buttonsPressed.right) {
       this.currentMidpoint.rotation -= TURN_SPEED
+      if (this.currentMidpoint.rotation < 0) this.currentMidpoint.rotation += 360
     }
 
     if (this.buttonsPressed.left || this.buttonsPressed.right) {
       this.node.rotation = this.currentMidpoint.rotation
+      figma.ui.postMessage({rotation: this.currentMidpoint.rotation})
     }
 
     if (this.buttonsPressed.up) {

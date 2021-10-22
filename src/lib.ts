@@ -26,21 +26,21 @@ export function getPlayer() {
   return player
 }
 
-export function loopAround(position: Vector) {
+export function loopAround(position: Vector, diameter: number) {
   let x = position.x
   let y = position.y
 
-  if (position.x < 0 - 12) {
-    x += worldRectangle.width + 12
+  if (position.x < 0 - diameter) {
+    x += worldRectangle.width + diameter
   }
-  if (position.x > worldRectangle.width + 12) {
-    x -= worldRectangle.width + 12
+  if (position.x > worldRectangle.width + diameter) {
+    x -= worldRectangle.width + diameter
   }
-  if (position.y < 0 - 12) {
-    y += worldRectangle.height + 12
+  if (position.y < 0 - diameter) {
+    y += worldRectangle.height + diameter
   }
-  if (position.y > worldRectangle.height + 12) {
-    y -= worldRectangle.height + 12
+  if (position.y > worldRectangle.height + diameter) {
+    y -= worldRectangle.height + diameter
   }
 
   return {x, y}

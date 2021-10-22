@@ -55,12 +55,12 @@ export class Planet {
     p.setVelocity(setMagnitude(p.getVelocity(), -0.2))
   }
 
-  public nextFrame(p: Player, d: number) {
-    if (d < this.radius) {
+  public nextFrame(p: Player, dist: number, shipDiameter: number) {
+    if (dist - shipDiameter / 2 < this.radius) {
       this.collide(p)
       return true
     } else {
-      this.applyGravity(p, d)
+      this.applyGravity(p, dist)
     }
     return false
   }

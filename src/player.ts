@@ -4,7 +4,6 @@ import { Midpoint } from "./lib"
 import { add, distance, magnitude, setMagnitude, normalize } from "./vector"
 import { getPlanets } from "./planets"
 
-const SPACESHIP_SIZE = 16
 const MAX_SPEED = 5.0
 const TURN_SPEED = 6.0
 const THRUST_POWER = 0.25
@@ -21,6 +20,9 @@ const MULTIPLAYER_COLORS: RGB[] = [
   {r: 255 / 255, g: 199 / 255, b: 0 / 255},
 ]
 
+// Shrink diameters by this much for nicer looking hit detection
+const DIAMETER_LENIENCY = 4
+
 export class Player {
   private velocity: Vector
   public buttonsPressed: Buttons = {up: false, left: false, right: false, x: false, esc: false}
@@ -28,6 +30,7 @@ export class Player {
   private thrustNode: RectangleNode
   private deathTimer: number | null = null
   private color: RGB
+  private diameter: number
 
   private thrustLastFlickeredOn = false
   private currentMidpoint: Midpoint // repeatedly accessing Figma node objects is slow. store this value locally
@@ -40,10 +43,11 @@ export class Player {
     hullNode.fills = [{color: this.color, type: "SOLID"}]
     hullNode.effects = [{type: "DROP_SHADOW", color: {r: 0, g: 0, b: 0, a: .25}, offset: {x: 0, y: 1}, radius: 4, visible: true, blendMode: "NORMAL"}]
 
+    this.diameter = Math.min(this.node.width, this.node.height) - DIAMETER_LENIENCY
     // Offset children so that the ship rotates about its center
     this.node.children.forEach(n => {
-      n.x -= SPACESHIP_SIZE / 2
-      n.y -= SPACESHIP_SIZE / 2
+      n.x -= this.diameter / 2
+      n.y -= this.diameter / 2
     })
 
     this.thrustNode = this.node.children[0]! as RectangleNode
@@ -63,7 +67,7 @@ export class Player {
     this.node.x = width / 2 + Math.random() * 50 - 25 + positionOffset.x
     // y position is purposefully moved 75px up so that plugin window starting position does not obscure ship
     this.node.y = height / 2 + Math.random() * 25 - 100 + positionOffset.y
-    this.currentMidpoint = {x: this.node.x, y: this.node.y, diameter: SPACESHIP_SIZE, rotation: 0}
+    this.currentMidpoint = {x: this.node.x, y: this.node.y, diameter: this.diameter, rotation: 0}
     figma.ui.postMessage({color: this.color, rotation: 0})
   }
 
@@ -137,13 +141,13 @@ export class Player {
     const newPos = add({x: this.currentMidpoint.x, y: this.currentMidpoint.y}, this.velocity)
     let playerCollided = false
     for (const p of getPlanets().getAll()) {
-      const d = distance(p.getCurrentMidpoint(), newPos)
-      if (d < p.getRadius() * GRAVITY_DISTANCE_THRESHOLD) {
-        playerCollided = playerCollided || p.nextFrame(this, d)
+      const dist = distance(p.getCurrentMidpoint(), newPos)
+      if (dist < p.getRadius() * GRAVITY_DISTANCE_THRESHOLD) {
+        playerCollided = playerCollided || p.nextFrame(this, dist, this.diameter)
       }
     }
     if (!playerCollided) {
-      this.setCurrentPosition(loopAround(newPos))
+      this.setCurrentPosition(loopAround(newPos, this.diameter))
     }
 
 

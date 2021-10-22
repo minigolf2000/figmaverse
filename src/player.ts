@@ -136,17 +136,15 @@ export class Player {
       this.velocity = setMagnitude(normalize(this.velocity), MAX_SPEED)
     }
 
-    const newPos = add({x: this.currentMidpoint.x, y: this.currentMidpoint.y}, this.velocity)
+    const newMidpoint = add({x: this.currentMidpoint.x, y: this.currentMidpoint.y}, this.velocity)
     let playerCollided = false
     for (const p of getPlanets().getAll()) {
-      const dist = distance(p.getCurrentMidpoint(), newPos)
-      if (dist < p.gravityDistanceThreshold()) {
-        playerCollided = playerCollided || p.nextFrame(this, dist, this.diameter)
-      }
+      const dist = distance(p.getCurrentMidpoint(), newMidpoint)
+      playerCollided = playerCollided || p.nextFrame(this, dist, newMidpoint, this.diameter)
     }
     console.log(playerCollided)
     if (!playerCollided) {
-      this.setCurrentPosition(loopAround(newPos, this.diameter))
+      this.setCurrentPosition(loopAround(newMidpoint, this.diameter))
     }
 
 

@@ -41,7 +41,7 @@ const sharedSetup = (shipSvg: string, worldNode: FrameNode) => {
   setWorldNode(worldNode)
   setWorldRectangle(worldNode)
 
-  figma.showUI(__html__, {width: 500, height: 500})
+  figma.showUI(__html__, {width: 500, height: 500, position: {x: 10000, y: 10000}})
 
   figma.viewport.zoom = 1
 

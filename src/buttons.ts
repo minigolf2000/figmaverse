@@ -15,15 +15,13 @@ export function onButtonsPressed(msg: any, buttonsPressed: Buttons) {
     case 190: // .
     case 90: // Z
     case 188: // ,
-      buttonsPressed.x = msg.type === 'keydown'
+    case 38: // UP_ARROW
+    case 87: // W
+      buttonsPressed.up = msg.type === 'keydown'
       break
     case 37: // LEFT_ARROW
     case 65: // A
       buttonsPressed.left = msg.type === 'keydown'
-      break
-    case 38: // UP_ARROW
-    case 87: // W
-      buttonsPressed.up = msg.type === 'keydown'
       break
     case 39: // RIGHT_ARROW
     case 68: // D

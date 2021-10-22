@@ -4,11 +4,7 @@ import { getMultiplayerPlayers, getPlayer, getWorldNode, setMultiplayerPlayers, 
 import { Player } from './player'
 import { ships } from './shipSvgs'
 
-// Return true if initializing as the server
-// Return false if initializing as a client
 export function init(shipSvg: string) {
-  // TODO: support configurable player numLives?
-
   const alreadyRunningWorld: FrameNode = figma.currentPage.children.find(n => n.type === "FRAME" && n.name.includes(" (to join, click Play planets in right panel!)")) as FrameNode
   if (alreadyRunningWorld) {
     sharedSetup(shipSvg, alreadyRunningWorld)
@@ -18,7 +14,7 @@ export function init(shipSvg: string) {
   let templateWorldNode: FrameNode | null = findFigmaverseFrame()
   let worldNode: FrameNode | null
   if (!templateWorldNode) {
-    console.log("1")
+    figma.closePlugin("Could not find a Frame named 'Figmaverse'")
     return
   }
 

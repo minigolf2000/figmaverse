@@ -8,8 +8,6 @@ const MAX_SPEED = 5.0
 const TURN_SPEED = 6.0
 const THRUST_POWER = 0.25
 
-// Gravity applies at this many radiuses away from a planet
-const GRAVITY_DISTANCE_THRESHOLD = 5
 const MULTIPLAYER_COLORS: RGB[] = [
   {r: 0 / 255, g: 181 / 255, b: 206 / 255},
   {r: 24 / 255, g: 160 / 255, b: 251 / 255},
@@ -142,7 +140,7 @@ export class Player {
     let playerCollided = false
     for (const p of getPlanets().getAll()) {
       const dist = distance(p.getCurrentMidpoint(), newPos)
-      if (dist < p.getRadius() * GRAVITY_DISTANCE_THRESHOLD) {
+      if (dist < p.gravityDistanceThreshold()) {
         playerCollided = playerCollided || p.nextFrame(this, dist, this.diameter)
       }
     }

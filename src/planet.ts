@@ -1,14 +1,19 @@
 import { Midpoint } from "./lib"
 import { Player } from "./player"
-import { setMagnitude, normalize, subtract, add, multiply } from "./vector"
+import { setMagnitude, normalize, subtract, add } from "./vector"
 
+
+// How much gravity planets have, directly correlated with diameter
+const GRAVITY_MULTIPLIER = 10
+
+// Gravity applies at this many radiuses away from a planet
+const GRAVITY_DISTANCE_THRESHOLD = 5
 export class Planet {
 
   public embedUrl: string
   private node: SceneNode
-  protected radius: number
   protected gravity: number
-  private currentMidpoint: Midpoint // repeatedly accessing Figma node objects is slow. store this value locally
+  protected currentMidpoint: Midpoint // repeatedly accessing Figma node objects is slow. store this value locally
 
   public constructor(node: SceneNode) {
     const relativeTransform = node.relativeTransform // this is a property that contains node's x, y, rotation as a matrix
@@ -19,8 +24,7 @@ export class Planet {
       rotation: 0 // We do not support planet rotation. Probably will be hard to do
     }
     this.node = node
-    this.radius = this.node.width / 2
-    this.gravity = this.radius
+    this.gravity = this.currentMidpoint.diameter * GRAVITY_MULTIPLIER
 
     if ('children' in node) {
       const textWithHyperlink = node.findChild(n => n.type === 'TEXT' && (n as any).hyperlink) as any
@@ -35,7 +39,7 @@ export class Planet {
   }
 
   public getRadius() {
-    return this.radius
+    return this.currentMidpoint.diameter / 2
   }
 
   public getGravity() {
@@ -56,7 +60,7 @@ export class Planet {
   }
 
   public nextFrame(p: Player, dist: number, shipDiameter: number) {
-    if (dist - shipDiameter / 2 < this.radius) {
+    if (dist - shipDiameter / 2 < this.currentMidpoint.diameter / 2) {
       this.collide(p)
       return true
     } else {
@@ -65,14 +69,18 @@ export class Planet {
     return false
   }
 
+  public gravityDistanceThreshold() {
+    return this.getRadius() * GRAVITY_DISTANCE_THRESHOLD
+  }
+
   private applyGravity(p: Player, d: number) {
     const playerMidpoint = p.getCurrentMidpoint()
     if (!playerMidpoint) {
       return
     }
-    const gravityVector = setMagnitude(normalize(subtract(this.currentMidpoint, playerMidpoint)), this.gravity / (d * d))
-    // console.log(this.getNode().name, gravityVector)
-    p.setVelocity(add(p.getVelocity(), multiply(gravityVector, 30)))
+    const gravityVector = setMagnitude(normalize(subtract(this.getCurrentMidpoint(), playerMidpoint)), this.gravity / (d * d))
+    const newVelocity = add(p.getVelocity(), gravityVector)
+    p.setVelocity(newVelocity)
 
   }
 }
@@ -80,8 +88,12 @@ export class Planet {
 export class WhiteHole extends Planet {
   public constructor(node: SceneNode) {
     super(node)
-    this.radius = 0
-    this.gravity = -10
+    this.currentMidpoint.diameter = 0
+    this.gravity = -1000 * GRAVITY_MULTIPLIER
+  }
+
+  public gravityDistanceThreshold() {
+    return 1000
   }
 }
 
@@ -90,18 +102,18 @@ export class BlackHole extends Planet {
   private exit: Midpoint
   public constructor(node: SceneNode) {
     super(node)
+    this.gravity = 400 * GRAVITY_MULTIPLIER
   }
 
   public setExit(e: Midpoint) {
     this.exit = e
   }
-  public getExit() {
-    return this.exit
-  }
 
   protected collide(p: Player) {
-    console.log("black hole action", this.exit)
-    p.setCurrentPosition({x: this.exit.x, y: this.exit.y})
+    p.setCurrentPosition({x: this.exit.x + 50 + p.getVelocity().x * 5, y: this.exit.y + 50 + p.getVelocity().y * 5})
   }
 
+  public gravityDistanceThreshold() {
+    return 1000
+  }
 }

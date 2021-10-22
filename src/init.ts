@@ -33,12 +33,9 @@ export function init(shipSvg: string) {
   setMultiplayerPlayers(loadTestPlayers)
 
   figma.currentPage.appendChild(player.getNode())
-
-
-  const pastSelection: string[] = figma.currentPage.selection.map(n => n.id)
   figma.currentPage.selection = []
-  // figma.ui.onmessage = (m) => onButtonsPressed(m, getPlayer().buttonsPressed)
 
+  // figma.ui.onmessage = (m) => onButtonsPressed(m, getPlayer().buttonsPressed)
   figma.ui.onmessage = (m) => {
     onButtonsPressed(m, getPlayer().buttonsPressed)
     for (const p of getMultiplayerPlayers()) {
@@ -46,10 +43,7 @@ export function init(shipSvg: string) {
     }
   }
 
-
   figma.on("close", () => {
-    figma.currentPage.selection = pastSelection.map(id => figma.getNodeById(id)).filter(n => !!n) as SceneNode[]
     !getPlayer().getNode().removed && getPlayer().getNode().remove()
   })
-
 }

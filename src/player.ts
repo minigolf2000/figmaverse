@@ -144,6 +144,7 @@ export class Player {
         playerCollided = playerCollided || p.nextFrame(this, dist, this.diameter)
       }
     }
+    console.log(playerCollided)
     if (!playerCollided) {
       this.setCurrentPosition(loopAround(newPos, this.diameter))
     }

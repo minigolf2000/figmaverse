@@ -12,6 +12,7 @@ const { AutoLayout, SVG, Text, useSyncedState, usePropertyMenu } = widget
 // Game loop run by multiplayerPlayers
 function nextFrame() {
   const player = getPlayer()
+  console.log("is player defined", player)
   if (player.buttonsPressed.esc) {
     figma.closePlugin()
     return

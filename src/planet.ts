@@ -1,6 +1,6 @@
 import { Midpoint } from "./lib"
 import { Player } from "./player"
-import { setMagnitude, normalize, subtract, add } from "./vector"
+import { setMagnitude, normalize, subtract, add, distance } from "./vector"
 
 
 // How much gravity planets have, directly correlated with diameter
@@ -56,13 +56,14 @@ export class Planet {
   }
 
   protected collide(p: Player) {
+    console.log("is this getting called still")
     p.setVelocity(setMagnitude(p.getVelocity(), -0.2))
+    return true
   }
 
   public nextFrame(p: Player, dist: number, shipDiameter: number) {
     if (dist - shipDiameter / 2 < this.currentMidpoint.diameter / 2) {
-      this.collide(p)
-      return true
+      return this.collide(p)
     } else {
       this.applyGravity(p, dist)
     }
@@ -111,9 +112,27 @@ export class BlackHole extends Planet {
 
   protected collide(p: Player) {
     p.setCurrentPosition({x: this.exit.x + 50 + p.getVelocity().x * 5, y: this.exit.y + 50 + p.getVelocity().y * 5})
+    return true
   }
 
   public gravityDistanceThreshold() {
     return 1000
+  }
+}
+
+export class OneillCylinder extends Planet {
+  protected collide(p: Player) {
+    const playerMidpoint = p.getCurrentMidpoint()
+    if (!playerMidpoint) {
+      return false
+    }
+    const currentDistance = distance(playerMidpoint, this.getCurrentMidpoint())
+    // console.log(currentDistance, this.currentMidpoint.diameter / 2)
+console.log(Math.abs(this.getCurrentMidpoint().y - playerMidpoint.y))
+    if (currentDistance > this.currentMidpoint.diameter / 2 - 10 && currentDistance < this.currentMidpoint.diameter / 2 + 10 && Math.abs(this.getCurrentMidpoint().y - playerMidpoint.y) > 50) {
+      return super.collide(p)
+    } else {
+      return false
+    }
   }
 }

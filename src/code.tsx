@@ -1,10 +1,13 @@
-import { init } from './init'
+const { widget } = figma
 import { FPS, getMultiplayerPlayers, getPlayer, getWorldNode, updateCamera } from './lib'
 import { Planet } from './planet'
 import { getPlanets } from './planets'
 import { Player } from './player'
 import { distance } from './vector'
+import { init } from "./init"
+import { ships } from "./shipSvgs"
 
+const { AutoLayout, SVG, Text, useSyncedState, usePropertyMenu } = widget
 
 // Game loop run by multiplayerPlayers
 function nextFrame() {
@@ -55,9 +58,7 @@ function updateLoomUrl(player: Player) {
     }
 
     currentClosestPlanet = closestPlanet
-
   }
-  player.getCurrentMidpoint()
 }
 
 let lastFrameTimestamp: number = Date.now()
@@ -68,5 +69,56 @@ export function printFPS() {
   console.info(`fps: ${fps}`)
 }
 
-init()
-setInterval(nextFrame, 1000 / FPS)
+export function Ship() {
+  const [count, setCount] = useSyncedState('count', 0)
+  const propertyMenu: WidgetPropertyMenuItem[] = [
+    {
+      tooltip: 'Choose this ship',
+      propertyName: 'launch',
+      itemType: 'action',
+    },
+    // {
+    //   tooltip: 'Down',
+    //   propertyName: 'decrement',
+    //   itemType: 'action',
+    // },
+    // {
+    //   tooltip: 'Up',
+    //   propertyName: 'increment',
+    //   itemType: 'action',
+    // },
+  ]
+
+  usePropertyMenu(propertyMenu, ({ propertyName }) => {
+    if (propertyName === 'decrement') {
+      setCount(count - 1)
+    } else if (propertyName === 'increment') {
+      setCount(count + 1)
+    } else if (propertyName === 'launch') {
+      init(ships[count])
+      setInterval(nextFrame, 1000 / FPS)
+      return new Promise<void>(() => {})
+    }
+  })
+
+  return (
+    <AutoLayout
+      direction={"vertical"}
+      horizontalAlignItems="center"
+      cornerRadius={8}
+      spacing={12}
+      stroke={{
+        type: 'solid',
+        color: '#123456',
+      }}
+    >
+      <SVG src={ships[count]} />
+      <Text fontSize={32} horizontalAlignText="center">
+        {count}
+      </Text>
+    </AutoLayout>
+  )
+}
+
+
+widget.register(Ship)

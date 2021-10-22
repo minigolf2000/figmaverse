@@ -2,21 +2,23 @@ import { Planets } from './planets'
 import { onButtonsPressed } from './buttons'
 import { getMultiplayerPlayers, getPlayer, getWorldNode, setMultiplayerPlayers, setPlayer, setWorldNode, setWorldRectangle } from './lib'
 import { Player } from './player'
+import { ships } from './shipSvgs'
 
 // Return true if initializing as the server
 // Return false if initializing as a client
-export function init() {
+export function init(shipSvg: string) {
   // TODO: support configurable player numLives?
 
   const alreadyRunningWorld: FrameNode = figma.currentPage.children.find(n => n.type === "FRAME" && n.name.includes(" (to join, click Play planets in right panel!)")) as FrameNode
   if (alreadyRunningWorld) {
-    sharedSetup(alreadyRunningWorld)
+    sharedSetup(shipSvg, alreadyRunningWorld)
     return
   }
 
-  let templateWorldNode: FrameNode | null = findNearestFrameAncestor()
+  let templateWorldNode: FrameNode | null = findFigmaverseFrame()
   let worldNode: FrameNode | null
   if (!templateWorldNode) {
+    console.log("1")
     return
   }
 
@@ -27,7 +29,7 @@ export function init() {
   worldNode.visible = true
 
   new Planets(worldNode.children)
-  sharedSetup(worldNode)
+  sharedSetup(shipSvg, worldNode)
 
   figma.currentPage.setRelaunchData({relaunch: ''})
   worldNode.setRelaunchData({relaunch: ''})
@@ -35,32 +37,31 @@ export function init() {
   return
 }
 
-const findNearestFrameAncestor = () => {
-  let current: SceneNode | null = figma.currentPage.selection[0]
-  while (current) {
-    if (current.type === 'FRAME') { return current as FrameNode }
-    current = current.parent as SceneNode | null
-  }
-  return null
+const findFigmaverseFrame = () => {
+  return figma.currentPage.findOne(n => n.name === 'Figmaverse' && n.type === 'FRAME') as FrameNode
 }
 
-const sharedSetup = (worldNode: FrameNode) => {
+const sharedSetup = (shipSvg: string, worldNode: FrameNode) => {
   setWorldNode(worldNode)
   setWorldRectangle(worldNode)
+
   figma.showUI(__html__, {width: 500, height: 500})
 
   figma.viewport.zoom = 1
 
   new Planets(worldNode.children)
 
-  const player = new Player()
+  const player = new Player(shipSvg)
   setPlayer(player)
   worldNode.appendChild(player.getNode())
 
   /* Load test */
   const loadTestPlayers: Player[] = []
-  for (let i = 0; i < 100; i++) {
-    const loadTestPlayer = new Player({x: Math.random() * 500, y: Math.random() * 500})
+  for (let i = 0; i < 0; i++) {
+    const loadTestPlayer = new Player(
+      ships[Math.floor(Math.random() * ships.length)],
+      {x: Math.random() * 500, y: Math.random() * 500}
+    )
     loadTestPlayers.push(loadTestPlayer)
     worldNode.appendChild(loadTestPlayer.getNode())
   }

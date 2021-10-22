@@ -5,5 +5,11 @@
     "noUnusedLocals": true,
     "noImplicitAny": true,
     "strictNullChecks": true,
+    "jsx": "react",
+    "jsxFactory": "figma.widget.h",
+    "typeRoots": [
+       "./node_modules/@types",
+       "./node_modules/@figma"
+    ]
   }
 }

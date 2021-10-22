@@ -18,18 +18,13 @@ export class Planets {
         const whiteHole = new WhiteHole(n)
         this.planets.push(whiteHole)
         whiteHoles[name.substring(1)] = whiteHole.getCurrentMidpoint()
-        return
-      }
-      if (name.startsWith("⚫")) {
+      } else if (name.startsWith("⚫")) {
         const blackHole = new BlackHole(n)
         this.planets.push(blackHole)
         blackHoles.push(blackHole)
+      } else if (name.startsWith("🪐")) {
+        this.planets.push(new Planet(n))
       }
-      if (name === "🚀" || name.startsWith("_") || name === "·") {
-        return
-      }
-
-      this.planets.push(new Planet(n))
     })
 
     for (const blackHole of blackHoles) {

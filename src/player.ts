@@ -32,13 +32,8 @@ export class Player {
   private thrustLastFlickeredOn = false
   private currentMidpoint: Midpoint // repeatedly accessing Figma node objects is slow. store this value locally
 
-  public constructor(positionOffset: Vector = {x: 0, y: 0}) {
-    this.node = figma.createNodeFromSvg(`
-    <svg width="16" height="20" viewBox="0 0 16 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M10.2897 13L8 18.6656L5.71027 13L10.2897 13Z" fill="#010101" stroke="white" stroke-linecap="square"/>
-    <path d="M1.5 16.9L8 1.3L14.5 16.9L8.23529 13.5588L8 13.4333L7.76471 13.5588L1.5 16.9Z" fill="#010101" stroke="white" stroke-linecap="square"/>
-    </svg>
-    `)
+  public constructor(shipSvg: string, positionOffset: Vector = {x: 0, y: 0}) {
+    this.node = figma.createNodeFromSvg(shipSvg)
 
     const hullNode: RectangleNode = (this.node.children[1]! as RectangleNode)
     this.color = MULTIPLAYER_COLORS[Math.floor(Math.random() * MULTIPLAYER_COLORS.length)];

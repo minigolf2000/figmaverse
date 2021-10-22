@@ -1,5 +1,5 @@
 const { widget } = figma
-import { FPS, getMultiplayerPlayers, getPlayer, getWorldNode, updateCamera } from './lib'
+import { FPS, getMultiplayerPlayers, getPlayer, updateCamera } from './lib'
 import { Planet } from './planet'
 import { getPlanets } from './planets'
 import { Player } from './player'
@@ -14,10 +14,6 @@ function nextFrame() {
   const player = getPlayer()
   if (player.buttonsPressed.esc) {
     figma.closePlugin()
-    return
-  }
-  if (getWorldNode().removed) {
-    figma.closePlugin("World was deleted, exiting plugin")
     return
   }
 

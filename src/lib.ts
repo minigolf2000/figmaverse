@@ -3,19 +3,15 @@ import { distance } from "./vector"
 
 export const FPS = 30
 
-let worldNode: FrameNode
-export function setWorldNode(w: FrameNode) {
-  worldNode = w
-}
-
-export function getWorldNode() {
-  return worldNode
-}
 
 let worldRectangle: World
 export function setWorldRectangle(w: FrameNode) {
   const {width, height, x, y} = w
   worldRectangle = {width, height, x, y}
+}
+
+export function getWorldRectangle() {
+  return worldRectangle
 }
 
 let player: Player

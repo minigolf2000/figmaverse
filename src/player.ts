@@ -1,4 +1,4 @@
-import { getWorldNode, loopAround } from "./lib"
+import { getWorldRectangle, loopAround } from "./lib"
 import { Buttons } from "./buttons"
 import { Midpoint } from "./lib"
 import { add, distance, magnitude, setMagnitude, normalize } from "./vector"
@@ -58,7 +58,7 @@ export class Player {
   }
 
   private newShip(positionOffset: Vector = {x: 0, y: 0}) {
-    const { width, height } = getWorldNode()
+    const { width, height } = getWorldRectangle()
     this.velocity = {x: 0, y: 0}
     this.node.rotation = 0
     // X and Y actually represent the top-left of the player's spaceship
@@ -88,8 +88,8 @@ export class Player {
     this.currentMidpoint.x = position.x
     this.currentMidpoint.y = position.y
 
-    this.node.x = position.x
-    this.node.y = position.y
+    this.node.x = position.x + getWorldRectangle().x
+    this.node.y = position.y + getWorldRectangle().y
   }
 
   public setVelocity(v: Vector) {

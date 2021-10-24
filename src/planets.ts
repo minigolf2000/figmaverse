@@ -1,5 +1,5 @@
 import { Midpoint } from "./lib"
-import { BlackHole, OneillCylinder, Planet, WhiteHole } from "./planet"
+import { BlackHole, GasGiant, OneillCylinder, Planet, WhiteHole } from "./planet"
 
 let a: Planets
 export function getPlanets() {
@@ -22,6 +22,8 @@ export class Planets {
         const blackHole = new BlackHole(n)
         this.planets.push(blackHole)
         blackHoles.push(blackHole)
+      } else if (name.startsWith("🌊")) {
+        this.planets.push(new GasGiant(n))
       } else if (name.startsWith("⭕️")) {
         this.planets.push(new OneillCylinder(n))
       } else if (name.startsWith("🪐")) {

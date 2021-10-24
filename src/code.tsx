@@ -12,7 +12,6 @@ const { AutoLayout, SVG, Text, useSyncedState, usePropertyMenu } = widget
 // Game loop run by multiplayerPlayers
 function nextFrame() {
   const player = getPlayer()
-  console.log("is player defined", player)
   if (player.buttonsPressed.esc) {
     figma.closePlugin()
     return
@@ -25,6 +24,7 @@ function nextFrame() {
 
   updateCamera(player, 200)
   updateLoomUrl(player)
+  updateRotationInIframe(player)
 }
 
 let currentClosestPlanet: Planet | null = null
@@ -52,6 +52,15 @@ function updateLoomUrl(player: Player) {
     }
 
     currentClosestPlanet = closestPlanet
+  }
+}
+
+let previousRotation = 0
+function updateRotationInIframe(player: Player) {
+  const newRotation = player.getCurrentMidpoint().rotation
+  if (newRotation !== previousRotation) {
+    figma.ui.postMessage({rotation: newRotation})
+    previousRotation = newRotation
   }
 }
 

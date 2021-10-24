@@ -1,6 +1,6 @@
 import { Midpoint } from "./lib"
 import { Player } from "./player"
-import { setMagnitude, normalize, subtract, add } from "./vector"
+import { setMagnitude, normalize, subtract, add, multiply } from "./vector"
 
 
 // How much gravity planets have, directly correlated with diameter
@@ -56,7 +56,6 @@ export class Planet {
   }
 
   protected collide(p: Player) {
-    console.log("is this getting called still")
     p.setVelocity(setMagnitude(p.getVelocity(), -0.2))
     return true
   }
@@ -97,7 +96,6 @@ export class WhiteHole extends Planet {
   }
 }
 
-
 export class BlackHole extends Planet {
   private exit: Midpoint
   public constructor(node: SceneNode) {
@@ -110,12 +108,26 @@ export class BlackHole extends Planet {
   }
 
   protected collide(p: Player) {
-    p.setCurrentPosition({x: this.exit.x + 50 + p.getVelocity().x * 5, y: this.exit.y + 50 + p.getVelocity().y * 5})
+    p.setCurrentPositionAndRotation({x: this.exit.x + 50 + p.getVelocity().x * 5, y: this.exit.y + 50 + p.getVelocity().y * 5})
     return true
   }
 
   public gravityDistanceThreshold() {
     return 1000
+  }
+}
+
+const VISCOSITY = .9
+const BUOYANCY = .1
+export class GasGiant extends Planet {
+  public gravityDistanceThreshold() {
+    return 2000
+  }
+
+  protected collide(p: Player) {
+    const buoyancyVector = setMagnitude(subtract(p.getCurrentMidpoint(), this.getCurrentMidpoint()), BUOYANCY)
+    p.setVelocity(add(multiply(p.getVelocity(), VISCOSITY), buoyancyVector))
+    return false
   }
 }
 

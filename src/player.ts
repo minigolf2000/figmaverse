@@ -3,7 +3,7 @@ import { Buttons } from "./buttons"
 import { Midpoint } from "./lib"
 import { add, distance, magnitude, setMagnitude, normalize } from "./vector"
 import { getPlanets } from "./planets"
-import * as matrix from "./matrix"
+import { getRelativeTransform } from "./matrix"
 
 const MAX_SPEED = 5.0
 const TURN_SPEED = 6.0
@@ -49,7 +49,6 @@ export class Player {
     // y position is purposefully moved 75px up so that plugin window starting position does not obscure ship
     this.node.y = height / 2 + Math.random() * 25 - 100 + positionOffset.y
     this.currentMidpoint = {x: this.node.x, y: this.node.y, diameter: this.diameter, rotation: 0}
-    figma.ui.postMessage({rotation: 0})
   }
 
   public getNode() {
@@ -64,23 +63,15 @@ export class Player {
     return this.velocity
   }
 
-  public setCurrentPosition(position: Vector, rotation: number = this.currentMidpoint.rotation) {
+  public setCurrentPositionAndRotation(position: Vector, rotation: number = this.currentMidpoint.rotation) {
     this.currentMidpoint.x = position.x
     this.currentMidpoint.y = position.y
 
-    let newRelativeTransform: Transform = matrix.move(position.x + getWorldRectangle().x, position.y + getWorldRectangle().y)
-
-    this.node.relativeTransform = matrix.multiply(newRelativeTransform, matrix.rotate(rotation))
-    figma.ui.postMessage({rotation: this.currentMidpoint.rotation})
+    this.node.relativeTransform = getRelativeTransform(position.x + getWorldRectangle().x, position.y + getWorldRectangle().y, rotation)
   }
 
   public setVelocity(v: Vector) {
     this.velocity = v
-  }
-
-  public takeDamage() {
-    this.node.visible = false
-    figma.ui.postMessage({death: true})
   }
 
   public nextFrame() {
@@ -121,10 +112,9 @@ export class Player {
     }
 
     if (!playerCollided) {
-      this.setCurrentPosition(loopAround(newMidpoint, this.diameter), this.currentMidpoint.rotation)
+      this.setCurrentPositionAndRotation(loopAround(newMidpoint, this.diameter), this.currentMidpoint.rotation)
     } else if (rotationChanged) {
       this.node.rotation = this.currentMidpoint.rotation
-      figma.ui.postMessage({rotation: this.currentMidpoint.rotation})
     }
 
 

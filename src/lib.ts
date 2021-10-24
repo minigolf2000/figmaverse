@@ -45,9 +45,7 @@ export function loopAround(position: Vector, diameter: number) {
 let currentCenter: Vector = figma.viewport.center
 export function updateCamera(player: Player, cameraBoxSize: number) {
   const midpoint = player.getCurrentMidpoint()
-  if (!midpoint) {
-    return
-  }
+
   // TODO: does this take link's width/height into account?
   const distFromCenter = cameraBoxSize / 3.5
   const currentX = midpoint.x + worldRectangle.x

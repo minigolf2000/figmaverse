@@ -3,6 +3,7 @@ import { Buttons } from "./buttons"
 import { Midpoint } from "./lib"
 import { add, distance, magnitude, setMagnitude, normalize } from "./vector"
 import { getPlanets } from "./planets"
+import * as matrix from "./matrix"
 
 const MAX_SPEED = 5.0
 const TURN_SPEED = 6.0
@@ -16,7 +17,6 @@ export class Player {
   public buttonsPressed: Buttons = {up: false, left: false, right: false, x: false, esc: false}
   private node: FrameNode
   private thrustNode: RectangleNode
-  private deathTimer: number | null = null
   private diameter: number
 
   private thrustLastFlickeredOn = false
@@ -56,10 +56,7 @@ export class Player {
     return this.node
   }
 
-  public getCurrentMidpoint(): Midpoint | null {
-    if (this.deathTimer) {
-      return null
-    }
+  public getCurrentMidpoint(): Midpoint {
     return this.currentMidpoint
   }
 
@@ -67,12 +64,14 @@ export class Player {
     return this.velocity
   }
 
-  public setCurrentPosition(position: Vector) {
+  public setCurrentPosition(position: Vector, rotation: number = this.currentMidpoint.rotation) {
     this.currentMidpoint.x = position.x
     this.currentMidpoint.y = position.y
 
-    this.node.x = position.x + getWorldRectangle().x
-    this.node.y = position.y + getWorldRectangle().y
+    let newRelativeTransform: Transform = matrix.move(position.x + getWorldRectangle().x, position.y + getWorldRectangle().y)
+
+    this.node.relativeTransform = matrix.multiply(newRelativeTransform, matrix.rotate(rotation))
+    figma.ui.postMessage({rotation: this.currentMidpoint.rotation})
   }
 
   public setVelocity(v: Vector) {
@@ -80,30 +79,25 @@ export class Player {
   }
 
   public takeDamage() {
-    this.deathTimer = 0
     this.node.visible = false
     figma.ui.postMessage({death: true})
   }
 
   public nextFrame() {
-    if (!this.node.visible) { // your ship can be marked invisible by other clients if they shoot you
-      this.deathTimer = 0
-      figma.ui.postMessage({death: true})
+    if (!this.node) {
       return
     }
 
+    let rotationChanged = false
     if (this.buttonsPressed.left) {
       this.currentMidpoint.rotation += TURN_SPEED
+      rotationChanged = true
       if (this.currentMidpoint.rotation > 360) this.currentMidpoint.rotation -= 360
     }
     if (this.buttonsPressed.right) {
       this.currentMidpoint.rotation -= TURN_SPEED
+      rotationChanged = true
       if (this.currentMidpoint.rotation < 0) this.currentMidpoint.rotation += 360
-    }
-
-    if (this.buttonsPressed.left || this.buttonsPressed.right) {
-      this.node.rotation = this.currentMidpoint.rotation
-      figma.ui.postMessage({rotation: this.currentMidpoint.rotation})
     }
 
     if (this.buttonsPressed.up) {
@@ -127,7 +121,10 @@ export class Player {
     }
 
     if (!playerCollided) {
-      this.setCurrentPosition(loopAround(newMidpoint, this.diameter))
+      this.setCurrentPosition(loopAround(newMidpoint, this.diameter), this.currentMidpoint.rotation)
+    } else if (rotationChanged) {
+      this.node.rotation = this.currentMidpoint.rotation
+      figma.ui.postMessage({rotation: this.currentMidpoint.rotation})
     }
 
 

@@ -22,7 +22,7 @@ export function init(shipSvg: string) {
 
   /* Load test */
   const loadTestPlayers: Player[] = []
-  for (let i = 0; i < 0; i++) {
+  for (let i = 0; i < 200; i++) {
     const loadTestPlayer = new Player(
       ships[Math.floor(Math.random() * ships.length)],
       {x: Math.random() * 500, y: Math.random() * 500}
@@ -45,5 +45,6 @@ export function init(shipSvg: string) {
 
   figma.on("close", () => {
     !getPlayer().getNode().removed && getPlayer().getNode().remove()
+    getMultiplayerPlayers().forEach(p => !p.getNode().removed && p.getNode().remove())
   })
 }

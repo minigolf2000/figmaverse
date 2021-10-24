@@ -8,16 +8,6 @@ const MAX_SPEED = 5.0
 const TURN_SPEED = 6.0
 const THRUST_POWER = 0.25
 
-const MULTIPLAYER_COLORS: RGB[] = [
-  {r: 0 / 255, g: 181 / 255, b: 206 / 255},
-  {r: 24 / 255, g: 160 / 255, b: 251 / 255},
-  {r: 27 / 255, g: 196 / 255, b: 125 / 255},
-  {r: 144 / 255, g: 124 / 255, b: 255 / 255},
-  {r: 238 / 255, g: 70 / 255, b: 211 / 255},
-  {r: 239 / 255, g: 85 / 255, b: 51 / 255},
-  {r: 255 / 255, g: 199 / 255, b: 0 / 255},
-]
-
 // Shrink diameters by this much for nicer looking hit detection
 const DIAMETER_LENIENCY = 4
 
@@ -27,7 +17,6 @@ export class Player {
   private node: FrameNode
   private thrustNode: RectangleNode
   private deathTimer: number | null = null
-  private color: RGB
   private diameter: number
 
   private thrustLastFlickeredOn = false
@@ -35,12 +24,6 @@ export class Player {
 
   public constructor(shipSvg: string, positionOffset: Vector = {x: 0, y: 0}) {
     this.node = figma.createNodeFromSvg(shipSvg)
-
-    const hullNode: RectangleNode = (this.node.children[1]! as RectangleNode)
-    this.color = MULTIPLAYER_COLORS[Math.floor(Math.random() * MULTIPLAYER_COLORS.length)];
-    hullNode.fills = [{color: this.color, type: "SOLID"}]
-    hullNode.effects = [{type: "DROP_SHADOW", color: {r: 0, g: 0, b: 0, a: .25}, offset: {x: 0, y: 1}, radius: 4, visible: true, blendMode: "NORMAL"}]
-
     this.diameter = Math.min(this.node.width, this.node.height) - DIAMETER_LENIENCY
     // Offset children so that the ship rotates about its center
     this.node.children.forEach(n => {
@@ -66,7 +49,7 @@ export class Player {
     // y position is purposefully moved 75px up so that plugin window starting position does not obscure ship
     this.node.y = height / 2 + Math.random() * 25 - 100 + positionOffset.y
     this.currentMidpoint = {x: this.node.x, y: this.node.y, diameter: this.diameter, rotation: 0}
-    figma.ui.postMessage({color: this.color, rotation: 0})
+    figma.ui.postMessage({rotation: 0})
   }
 
   public getNode() {
@@ -142,7 +125,7 @@ export class Player {
       const dist = distance(p.getCurrentMidpoint(), newMidpoint)
       playerCollided = playerCollided || p.nextFrame(this, dist, newMidpoint, this.diameter)
     }
-    console.log(playerCollided)
+
     if (!playerCollided) {
       this.setCurrentPosition(loopAround(newMidpoint, this.diameter))
     }

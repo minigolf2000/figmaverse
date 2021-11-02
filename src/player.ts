@@ -4,6 +4,7 @@ import { Midpoint } from "./lib"
 import { add, distance, magnitude, setMagnitude, normalize } from "./vector"
 import { getPlanets } from "./planets"
 import { getRelativeTransform } from "./matrix"
+import { isExited } from "./init"
 
 const MAX_SPEED = 5.0
 const TURN_SPEED = 6.0
@@ -34,7 +35,7 @@ export class Player {
     this.thrustNode = this.node.children[0]! as RectangleNode
     this.thrustNode.visible = false
     this.node.clipsContent = false
-    this.node.name = "🚀"
+    this.node.name = `🚀 ${figma.currentUser?.name}`
     this.node.locked = true
 
     const { width, height } = getWorldRectangle()
@@ -65,7 +66,9 @@ export class Player {
     this.currentMidpoint.x = position.x
     this.currentMidpoint.y = position.y
 
-    this.node.relativeTransform = getRelativeTransform(position.x + getWorldRectangle().x, position.y + getWorldRectangle().y, rotation)
+    if (!isExited) {
+      this.node.relativeTransform = getRelativeTransform(position.x + getWorldRectangle().x, position.y + getWorldRectangle().y, rotation)
+    }
   }
 
   public setVelocity(v: Vector) {
@@ -92,10 +95,14 @@ export class Player {
     if (this.buttonsPressed.up) {
       const directionVector = {x: -Math.sin(this.currentMidpoint.rotation * Math.PI / 180), y: -Math.cos(this.currentMidpoint.rotation * Math.PI / 180)}
       this.velocity = add(this.velocity, setMagnitude(directionVector, THRUST_POWER))
-      this.thrustNode.visible = !this.thrustLastFlickeredOn
+      if (!isExited) {
+        this.thrustNode.visible = !this.thrustLastFlickeredOn
+      }
       this.thrustLastFlickeredOn = !this.thrustLastFlickeredOn
     } else {
-      this.thrustNode.visible = false
+      if (!isExited) {
+        this.thrustNode.visible = false
+      }
     }
 
     if (magnitude(this.velocity) > MAX_SPEED) {
@@ -112,7 +119,9 @@ export class Player {
     if (!playerCollided) {
       this.setCurrentPositionAndRotation(loopAround(newMidpoint, this.diameter), this.currentMidpoint.rotation)
     } else if (rotationChanged) {
-      this.node.rotation = this.currentMidpoint.rotation
+      if (!isExited) {
+        this.node.rotation = this.currentMidpoint.rotation
+      }
     }
 
 

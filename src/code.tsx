@@ -4,7 +4,7 @@ import { Planet } from './planet'
 import { getPlanets } from './planets'
 import { Player } from './player'
 import { distance } from './vector'
-import { init } from "./init"
+import { init, isExited } from "./init"
 import { ships } from "./shipSvgs"
 
 const { SVG, useSyncedState, usePropertyMenu } = widget
@@ -58,7 +58,7 @@ function updateLoomUrl(player: Player) {
 let previousRotation = 0
 function updateRotationInIframe(player: Player) {
   const newRotation = player.getCurrentMidpoint().rotation
-  if (newRotation !== previousRotation) {
+  if (newRotation !== previousRotation && !isExited) {
     figma.ui.postMessage({rotation: newRotation})
     previousRotation = newRotation
   }

@@ -4,6 +4,7 @@ import { getMultiplayerPlayers, getPlayer, getShipNodeFromIndex, setMultiplayerP
 import { Player } from './player'
 import { ships } from './shipSvgs'
 
+export let isExited = false
 // Insert spaceship nodes on top of Figmaverse but beneath everything else
 const insertionIndex = 1
 
@@ -23,7 +24,7 @@ export function init(shipIndex: number) {
   figma.viewport.zoom = 1
 
   const playerNode = getShipNodeFromIndex(shipIndex)
-  // Delete any old nodes created by this player
+  // Delete any old 🚀 nodes created by this player
   for (const child of figma.currentPage.children) {
     if (child.type === "FRAME" && child.getPluginData('user-id') === figma.currentUser.id) {
       child.remove()
@@ -58,6 +59,7 @@ export function init(shipIndex: number) {
   }
 
   figma.on("close", () => {
+    isExited = true
     !getPlayer().getNode().removed && getPlayer().getNode().remove()
     getMultiplayerPlayers().forEach(p => !p.getNode().removed && p.getNode().remove())
   })

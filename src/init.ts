@@ -1,10 +1,13 @@
 import { Planets } from './planets'
 import { onButtonsPressed } from './buttons'
-import { getMultiplayerPlayers, getPlayer, setMultiplayerPlayers, setPlayer, setWorldRectangle } from './lib'
+import { getMultiplayerPlayers, getPlayer, getShipNodeFromIndex, setMultiplayerPlayers, setPlayer, setWorldRectangle } from './lib'
 import { Player } from './player'
 import { ships } from './shipSvgs'
 
-export function init(shipSvg: string) {
+// Insert spaceship nodes on top of Figmaverse but beneath everything else
+const insertionIndex = 1
+
+export function init(shipIndex: number) {
   const figmaverseFrame = figma.currentPage.findOne(n => n.name === 'Figmaverse' && n.type === 'FRAME') as FrameNode
   if (!figmaverseFrame) {
     figma.closePlugin("Could not find a Frame named 'Figmaverse'")
@@ -17,22 +20,22 @@ export function init(shipSvg: string) {
   figma.showUI(__html__, {width: 500, height: 500, position: {x: 10000, y: 10000}})
   figma.viewport.zoom = 1
 
-  const player = new Player(shipSvg)
+  const player = new Player(getShipNodeFromIndex(shipIndex))
   setPlayer(player)
 
   /* Load test */
   const loadTestPlayers: Player[] = []
   for (let i = 0; i < 0; i++) {
     const loadTestPlayer = new Player(
-      ships[Math.floor(Math.random() * ships.length)],
+      getShipNodeFromIndex(1 + Math.floor(Math.random() * (ships.length - 1))),
       {x: Math.random() * 500 - 250, y: Math.random() * 500 - 250}
     )
     loadTestPlayers.push(loadTestPlayer)
-    figma.currentPage.appendChild(loadTestPlayer.getNode())
+    figma.currentPage.insertChild(insertionIndex, loadTestPlayer.getNode())
   }
   setMultiplayerPlayers(loadTestPlayers)
 
-  figma.currentPage.appendChild(player.getNode())
+  figma.currentPage.insertChild(insertionIndex, player.getNode())
   figma.currentPage.selection = []
 
   // figma.ui.onmessage = (m) => onButtonsPressed(m, getPlayer().buttonsPressed)

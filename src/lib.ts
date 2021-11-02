@@ -105,3 +105,16 @@ export function setMultiplayerPlayers(m: Player[]) {
 export function isHost() {
   return true
 }
+
+export function getShipNodeFromIndex(shipIndex: number): FrameNode {
+  const shipsPage = figma.root.findChild(p => p.name === 'Ships')
+  if (!shipsPage) {
+    throw "no ships page"
+  }
+
+  const shipNode = shipsPage.findChild(c => c.name === `ship-${shipIndex}` && c.type === "FRAME") as FrameNode
+  if (!shipNode) {
+    throw "no ship found"
+  }
+  return shipNode.clone()
+}

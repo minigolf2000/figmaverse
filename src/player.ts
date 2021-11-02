@@ -22,8 +22,8 @@ export class Player {
   private thrustLastFlickeredOn = false
   private currentMidpoint: Midpoint // repeatedly accessing Figma node objects is slow. store this value locally
 
-  public constructor(shipSvg: string, positionOffset: Vector = {x: 0, y: 0}) {
-    this.node = figma.createNodeFromSvg(shipSvg)
+  public constructor(shipNode: FrameNode, positionOffset: Vector = {x: 0, y: 0}) {
+    this.node = shipNode
     this.diameter = Math.min(this.node.width, this.node.height) - DIAMETER_LENIENCY
     // Offset children so that the ship rotates about its center
     this.node.children.forEach(n => {
@@ -37,17 +37,15 @@ export class Player {
     this.node.name = "🚀"
     this.node.locked = true
 
-    this.newShip(positionOffset)
-  }
-
-  private newShip(positionOffset: Vector = {x: 0, y: 0}) {
     const { width, height } = getWorldRectangle()
     this.velocity = {x: 0, y: 0}
     this.node.rotation = 0
+
+    const {x, y} = figma.currentPage.selection[0]
     // X and Y actually represent the top-left of the player's spaceship
-    this.node.x = width / 2 + Math.random() * 50 - 25 + positionOffset.x
+    this.node.x = width / 2 + Math.random() * 50 - 25 + positionOffset.x + x
     // y position is purposefully moved 75px up so that plugin window starting position does not obscure ship
-    this.node.y = height / 2 + Math.random() * 25 - 100 + positionOffset.y
+    this.node.y = height / 2 + Math.random() * 25 - 100 + positionOffset.y + y - 100
     this.currentMidpoint = {x: this.node.x, y: this.node.y, diameter: this.diameter, rotation: 0}
   }
 

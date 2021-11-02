@@ -98,7 +98,7 @@ export function Ship() {
     } else if (propertyName === 'increment') {
       setCount(count + 1)
     } else if (propertyName === 'launch') {
-      init(ships[count])
+      init(count)
       setInterval(nextFrame, 1000 / FPS)
       return new Promise<void>(() => {})
     }

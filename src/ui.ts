@@ -35,9 +35,13 @@ onmessage = (event) => {
     if (iframe) {
       iframe.src = embedUrl
     }
-    const planetImg = document.getElementById("planetImg") as HTMLImageElement
-    if (planetImg) {
-      planetImg.src = URL.createObjectURL(new Blob([planetImgArray], {type: 'image/png'}))
+    // const planetImg = document.getElementById("planetImg") as HTMLImageElement
+    // if (planetImg) {
+    //   planetImg.src = URL.createObjectURL(new Blob([planetImgArray], {type: 'image/png'}))
+    // }
+    const panel = document.getElementById("ui") as HTMLDivElement
+    if (panel) {
+      panel.style.background = `url(${URL.createObjectURL(new Blob([planetImgArray], {type: 'image/png'}))}) no-repeat center center fixed`
     }
   }
 }

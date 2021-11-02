@@ -31,6 +31,7 @@ export function init(shipIndex: number) {
     }
   }
   playerNode.setPluginData('user-id', figma.currentUser.id)
+  playerNode.exportAsync({format: "PNG"}).then(shipSvg => figma.ui.postMessage({shipSvg}))
 
   const player = new Player(playerNode)
   setPlayer(player)

@@ -51,3 +51,7 @@ body {
   height: 64px;
   width: 64px;
 }
+
+#ship {
+  object-fit: contain;
+}

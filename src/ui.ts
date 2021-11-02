@@ -20,12 +20,19 @@ uiEl.onfocus = () => {
 let currentEmbedUrl = ""
 onmessage = (event) => {
   if (!event.data.pluginMessage) { return }
-  const { rotation, embedUrl, planetImgArray } = event.data.pluginMessage
+  const { shipSvg, rotation, embedUrl, planetImgArray } = event.data.pluginMessage
 
   if (rotation !== undefined) {
     const shipNode = document.getElementById("ship")
     if (shipNode) {
       shipNode.style.transform = `rotate(-${rotation}deg)`
+    }
+  }
+
+  if (shipSvg !== undefined) {
+    const shipNode = document.getElementById("ship") as HTMLImageElement
+    if (shipNode) {
+      shipNode.src = URL.createObjectURL(new Blob([shipSvg], {type: 'image/png'}))
     }
   }
 

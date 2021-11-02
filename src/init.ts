@@ -22,7 +22,7 @@ export function init(shipSvg: string) {
 
   /* Load test */
   const loadTestPlayers: Player[] = []
-  for (let i = 0; i < 500; i++) {
+  for (let i = 0; i < 0; i++) {
     const loadTestPlayer = new Player(
       ships[Math.floor(Math.random() * ships.length)],
       {x: Math.random() * 500 - 250, y: Math.random() * 500 - 250}

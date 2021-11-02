@@ -25,6 +25,9 @@ function nextFrame() {
   updateCamera(player, 200)
   updateLoomUrl(player)
   updateRotationInIframe(player)
+  if (player.buttonsPressed.left ||player.buttonsPressed.right ||player.buttonsPressed.up) {
+    figma.viewport.zoom = 1
+  }
 }
 
 let currentClosestPlanet: Planet | null = null

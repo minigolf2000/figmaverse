@@ -7,7 +7,7 @@ import { distance } from './vector'
 import { init } from "./init"
 import { ships } from "./shipSvgs"
 
-const { AutoLayout, SVG, Text, useSyncedState, usePropertyMenu } = widget
+const { SVG, useSyncedState, usePropertyMenu } = widget
 
 // Game loop run by multiplayerPlayers
 function nextFrame() {
@@ -105,21 +105,7 @@ export function Ship() {
   })
 
   return (
-    <AutoLayout
-      direction={"vertical"}
-      horizontalAlignItems="center"
-      cornerRadius={8}
-      spacing={12}
-      stroke={{
-        type: 'solid',
-        color: '#123456',
-      }}
-    >
-      <SVG src={ships[count]} />
-      <Text fontSize={32} horizontalAlignText="center">
-        {count}
-      </Text>
-    </AutoLayout>
+    <SVG src={ships[count]} />
   )
 }
 

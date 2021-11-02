@@ -8,11 +8,13 @@ import { ships } from './shipSvgs'
 const insertionIndex = 1
 
 export function init(shipIndex: number) {
+  if (!figma.currentUser?.id) { throw "Workshop mode users cannot run widgets" }
   const figmaverseFrame = figma.currentPage.findOne(n => n.name === 'Figmaverse' && n.type === 'FRAME') as FrameNode
   if (!figmaverseFrame) {
     figma.closePlugin("Could not find a Frame named 'Figmaverse'")
     return
   }
+
 
   new Planets(figmaverseFrame.children)
   setWorldRectangle(figmaverseFrame)
@@ -20,7 +22,16 @@ export function init(shipIndex: number) {
   figma.showUI(__html__, {width: 500, height: 500, position: {x: 10000, y: 10000}})
   figma.viewport.zoom = 1
 
-  const player = new Player(getShipNodeFromIndex(shipIndex))
+  const playerNode = getShipNodeFromIndex(shipIndex)
+  // Delete any old nodes created by this player
+  for (const child of figma.currentPage.children) {
+    if (child.type === "FRAME" && child.getPluginData('user-id') === figma.currentUser.id) {
+      child.remove()
+    }
+  }
+  playerNode.setPluginData('user-id', figma.currentUser.id)
+
+  const player = new Player(playerNode)
   setPlayer(player)
 
   /* Load test */

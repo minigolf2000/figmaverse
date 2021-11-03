@@ -17,7 +17,7 @@ uiEl.onkeydown = (e: KeyboardEvent) => {
       case 87: // W
         const up = document.getElementById("space") as HTMLElement
         const upSquare = document.getElementById("spaceSquare") as HTMLElement
-        up.setAttribute('fill', 'black')
+        up.setAttribute('fill', '#2E2E2E')
         upSquare.setAttribute('fill', 'white')
         break
       case 37: // LEFT_ARROW
@@ -25,14 +25,14 @@ uiEl.onkeydown = (e: KeyboardEvent) => {
         const left = document.getElementById("left") as HTMLElement
         const leftSquare = document.getElementById("leftSquare") as HTMLElement
         left.setAttribute('fill', 'white')
-        leftSquare.setAttribute('fill', 'black')
+        leftSquare.setAttribute('fill', '#2E2E2E')
         break
       case 39: // RIGHT_ARROW
       case 68: // D
         const right = document.getElementById("right") as HTMLElement
         const rightSquare = document.getElementById("rightSquare") as HTMLElement
         right.setAttribute('fill', 'white')
-        rightSquare.setAttribute('fill', 'black')
+        rightSquare.setAttribute('fill', '#2E2E2E')
         break
       default:
         // up.stroke = `blue`
@@ -54,20 +54,20 @@ uiEl.onkeyup = (e: KeyboardEvent) => {
       const up = document.getElementById("space") as HTMLElement
       const upSquare = document.getElementById("spaceSquare") as HTMLElement
       up.setAttribute('fill', 'white')
-      upSquare.setAttribute('fill', 'black')
+      upSquare.setAttribute('fill', '#2E2E2E')
       break
     case 37: // LEFT_ARROW
     case 65: // A
       const left = document.getElementById("left") as HTMLElement
       const leftSquare = document.getElementById("leftSquare") as HTMLElement
-      left.setAttribute('fill', 'black')
+      left.setAttribute('fill', '#2E2E2E')
       leftSquare.setAttribute('fill', 'white')
       break
     case 39: // RIGHT_ARROW
     case 68: // D
       const right = document.getElementById("right") as HTMLElement
       const rightSquare = document.getElementById("rightSquare") as HTMLElement
-      right.setAttribute('fill', 'black')
+      right.setAttribute('fill', '#2E2E2E')
       rightSquare.setAttribute('fill', 'white')
       break
   }

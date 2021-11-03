@@ -70,6 +70,7 @@ uiEl.onkeyup = (e: KeyboardEvent) => {
       right.setAttribute('fill', 'black')
       rightSquare.setAttribute('fill', 'white')
       break
+  }
 }
 uiEl.onblur = () => {
   parent.postMessage({ pluginMessage: { type: 'blur' } }, '*')

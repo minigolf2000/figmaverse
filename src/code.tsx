@@ -26,7 +26,7 @@ function nextFrame() {
   updateLoomUrl(player)
   updateRotationInIframe(player)
   if (player.buttonsPressed.left ||player.buttonsPressed.right ||player.buttonsPressed.up) {
-    figma.viewport.zoom = 1
+    figma.viewport.zoom = .5
   }
 }
 
@@ -83,16 +83,6 @@ export function Ship() {
       propertyName: 'launch',
       itemType: 'action',
     },
-    // {
-    //   tooltip: 'Down',
-    //   propertyName: 'decrement',
-    //   itemType: 'action',
-    // },
-    // {
-    //   tooltip: 'Up',
-    //   propertyName: 'increment',
-    //   itemType: 'action',
-    // },
   ]
 
   usePropertyMenu(propertyMenu, ({ propertyName }) => {

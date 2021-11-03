@@ -114,7 +114,7 @@ export function getShipNodeFromIndex(shipIndex: number): FrameNode {
 
   const shipNode = shipsPage.findChild(c => c.name === `ship-${shipIndex}` && c.type === "FRAME") as FrameNode
   if (!shipNode) {
-    throw "no ship found"
+    throw `no ship found with name ship-${shipIndex}`
   }
   return shipNode.clone()
 }

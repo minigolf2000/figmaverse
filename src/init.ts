@@ -21,7 +21,7 @@ export function init(shipIndex: number) {
   setWorldRectangle(figmaverseFrame)
 
   figma.showUI(__html__, {width: 500, height: 500, position: {x: 10000, y: 10000}})
-  figma.viewport.zoom = 1
+  figma.viewport.zoom = .5
 
   const playerNode = getShipNodeFromIndex(shipIndex)
   // Delete any old 🚀 nodes created by this player

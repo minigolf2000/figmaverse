@@ -17,22 +17,22 @@ uiEl.onkeydown = (e: KeyboardEvent) => {
       case 87: // W
         const up = document.getElementById("space") as HTMLElement
         const upSquare = document.getElementById("spaceSquare") as HTMLElement
-        up.setAttribute('fill', 'red')
-        upSquare.setAttribute('fill', 'blue')
+        up.setAttribute('fill', 'black')
+        upSquare.setAttribute('fill', 'white')
         break
       case 37: // LEFT_ARROW
       case 65: // A
         const left = document.getElementById("left") as HTMLElement
         const leftSquare = document.getElementById("leftSquare") as HTMLElement
-        left.setAttribute('fill', 'red')
-        leftSquare.setAttribute('fill', 'blue')
+        left.setAttribute('fill', 'white')
+        leftSquare.setAttribute('fill', 'black')
         break
       case 39: // RIGHT_ARROW
       case 68: // D
         const right = document.getElementById("right") as HTMLElement
         const rightSquare = document.getElementById("rightSquare") as HTMLElement
-        right.setAttribute('fill', 'red')
-        rightSquare.setAttribute('fill', 'blue')
+        right.setAttribute('fill', 'white')
+        rightSquare.setAttribute('fill', 'black')
         break
       default:
         // up.stroke = `blue`
@@ -60,8 +60,8 @@ uiEl.onkeyup = (e: KeyboardEvent) => {
     case 65: // A
       const left = document.getElementById("left") as HTMLElement
       const leftSquare = document.getElementById("leftSquare") as HTMLElement
-      left.setAttribute('fill', 'white')
-      leftSquare.setAttribute('fill', 'black')
+      left.setAttribute('fill', 'black')
+      leftSquare.setAttribute('fill', 'white')
       break
     case 39: // RIGHT_ARROW
     case 68: // D

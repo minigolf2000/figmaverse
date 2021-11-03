@@ -1,9 +1,14 @@
+html, body {
+  background-color: #2E2E2E;
+}
+
 body {
   font: 22px "Inter", sans-serif;
   margin: 0;
 }
 
 #ui {
+  background-color: white;
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -44,11 +49,7 @@ body {
 #loom {
   height: 360px;
   width: 720px;
-}
-
-#planetImg {
-  height: 64px;
-  width: 64px;
+  display: none;
 }
 
 #ship {
@@ -56,11 +57,23 @@ body {
 }
 
 #loading {
+  background-color: #2E2E2E;
   position: absolute;
-  width: 640px;
-  height: 320px;
+  top: 80px;
+  width: 720px;
+  height: 360px;
   display: none;
   flex-direction: column;
+  margin: auto auto;
+  justify-content: center;
+  align-items: center;
+  gap: 32px;
+}
+
+
+#loading .planet {
+  height: 64px;
+  width: 64px;
 }
 
 #planet-overlay {

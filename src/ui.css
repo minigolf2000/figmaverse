@@ -7,30 +7,30 @@ body {
   height: 100%;
   display: flex;
   flex-direction: column;
-  box-sizing: border-box;
+}
+
+#status {
+  display: flex;
+  flex-direction: row;
   align-items: center;
-  justify-content: space-around;
-  padding: 0px 20px;
-  user-select: none;
+  gap: 16px;
+  height: 80px;
+  margin: 0px auto;
 }
 
 #paused {
+  position: absolute;
   display: none;
-  flex-direction: column;
-  line-height: 1.4em;
-  font-size: 18px;
-  text-align: center;
-  top: 50%;  /* position the top  edge of the element at the middle of the parent */
-  left: 50%; /* position the left edge of the element at the middle of the parent */
-}
-
-#paused #title {
-  font-size: 18px;
-  font-weight: bold;
+  flex-direction: row;
+  height: 80px;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  background-color: #d91b67;
 }
 
 #ui:not(:focus) {
-  border: 3px solid #FAA1A1;
+  background-color: #d91b67;
 }
 
 #ui:not(:focus) #paused {
@@ -42,9 +42,8 @@ body {
 }
 
 #loom {
-  height: 300px;
-  width: 400px;
-  border: 1px solid black;
+  height: 360px;
+  width: 720px;
 }
 
 #planetImg {
@@ -54,4 +53,20 @@ body {
 
 #ship {
   object-fit: contain;
+}
+
+#loading {
+  position: absolute;
+  width: 640px;
+  height: 320px;
+  display: none;
+  flex-direction: column;
+}
+
+#planet-overlay {
+  width: 32px;
+  height: 24px;
+  position: absolute;
+  top: 16px;
+  left: 16px;
 }

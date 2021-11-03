@@ -47,10 +47,12 @@ function updateLoomUrl(player: Player) {
     if (closestPlanet) {
       closestPlanet.getNode().exportAsync({format: "PNG"}).then((planetImgArray: Uint8Array) => {
         if (closestPlanet) {
+          figma.ui.resize(720, 140 + 360)
           figma.ui.postMessage({embedUrl: closestPlanet.embedUrl, planetImgArray})
         }
       })
     } else {
+      figma.ui.resize(400, 140)
       figma.ui.postMessage({embedUrl: "", planetImgArray: []})
     }
 

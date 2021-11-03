@@ -36,19 +36,29 @@ onmessage = (event) => {
     }
   }
 
+  console.log(embedUrl, currentEmbedUrl)
   if (embedUrl !== undefined && embedUrl !== currentEmbedUrl) {
-    currentEmbedUrl = embedUrl
+    console.log("update")
     const iframe = document.getElementById("loom") as HTMLIFrameElement
-    if (iframe) {
-      iframe.src = embedUrl
+    const loading = document.getElementById("loading") as HTMLDivElement
+    iframe.src = embedUrl
+    if (embedUrl === "") {
+      iframe.style.display = "none"
+      loading.style.display = "none"
+    } else {
+      iframe.style.display = "block"
+      loading.style.display = "flex"
     }
+
+    currentEmbedUrl = embedUrl
+
     // const planetImg = document.getElementById("planetImg") as HTMLImageElement
     // if (planetImg) {
     //   planetImg.src = URL.createObjectURL(new Blob([planetImgArray], {type: 'image/png'}))
     // }
-    const panel = document.getElementById("ui") as HTMLDivElement
-    if (panel) {
-      panel.style.background = `url(${URL.createObjectURL(new Blob([planetImgArray], {type: 'image/png'}))}) no-repeat center center fixed`
+    const planetImg = document.getElementById("planetImg") as HTMLImageElement
+    if (planetImg) {
+      planetImg.src = URL.createObjectURL(new Blob([planetImgArray], {type: 'image/png'}))
     }
   }
 }

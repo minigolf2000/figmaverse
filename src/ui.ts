@@ -5,10 +5,71 @@ uiEl.focus()
 uiEl.onkeydown = (e: KeyboardEvent) => {
   if (!e.repeat) {
     parent.postMessage({ pluginMessage: { type: 'keydown', keyCode: e.keyCode } }, '*')
+    switch (e.keyCode as number) {
+      case 13: // ENTER
+      case 16: // SHIFT
+      case 32: // SPACE
+      case 88: // X
+      case 190: // .
+      case 90: // Z
+      case 188: // ,
+      case 38: // UP_ARROW
+      case 87: // W
+        const up = document.getElementById("space") as HTMLElement
+        const upSquare = document.getElementById("spaceSquare") as HTMLElement
+        up.setAttribute('fill', 'red')
+        upSquare.setAttribute('fill', 'blue')
+        break
+      case 37: // LEFT_ARROW
+      case 65: // A
+        const left = document.getElementById("left") as HTMLElement
+        const leftSquare = document.getElementById("leftSquare") as HTMLElement
+        left.setAttribute('fill', 'red')
+        leftSquare.setAttribute('fill', 'blue')
+        break
+      case 39: // RIGHT_ARROW
+      case 68: // D
+        const right = document.getElementById("right") as HTMLElement
+        const rightSquare = document.getElementById("rightSquare") as HTMLElement
+        right.setAttribute('fill', 'red')
+        rightSquare.setAttribute('fill', 'blue')
+        break
+      default:
+        // up.stroke = `blue`
+    }
   }
 }
 uiEl.onkeyup = (e: KeyboardEvent) => {
   parent.postMessage({ pluginMessage: { type: 'keyup', keyCode: e.keyCode } }, '*')
+  switch (e.keyCode as number) {
+    case 13: // ENTER
+    case 16: // SHIFT
+    case 32: // SPACE
+    case 88: // X
+    case 190: // .
+    case 90: // Z
+    case 188: // ,
+    case 38: // UP_ARROW
+    case 87: // W
+      const up = document.getElementById("space") as HTMLElement
+      const upSquare = document.getElementById("spaceSquare") as HTMLElement
+      up.setAttribute('fill', 'white')
+      upSquare.setAttribute('fill', 'black')
+      break
+    case 37: // LEFT_ARROW
+    case 65: // A
+      const left = document.getElementById("left") as HTMLElement
+      const leftSquare = document.getElementById("leftSquare") as HTMLElement
+      left.setAttribute('fill', 'white')
+      leftSquare.setAttribute('fill', 'black')
+      break
+    case 39: // RIGHT_ARROW
+    case 68: // D
+      const right = document.getElementById("right") as HTMLElement
+      const rightSquare = document.getElementById("rightSquare") as HTMLElement
+      right.setAttribute('fill', 'black')
+      rightSquare.setAttribute('fill', 'white')
+      break
 }
 uiEl.onblur = () => {
   parent.postMessage({ pluginMessage: { type: 'blur' } }, '*')

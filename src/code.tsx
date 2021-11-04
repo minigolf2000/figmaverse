@@ -36,7 +36,7 @@ function updateLoomUrl(player: Player) {
   const playerMidpoint = player.getCurrentMidpoint()
   let closestPlanetDistance: number = Infinity
   let closestPlanet: Planet | null = null
-  for (const planet of getPlanets().getAll()) {
+  for (const planet of getPlanets().getAll().filter(p => !!p.embedUrl)) {
     const d = distance(planet.getCurrentMidpoint(), playerMidpoint)
     if (d < VIDEO_DISTANCE_THRESHOLD && d < closestPlanetDistance) {
       closestPlanet = planet
@@ -44,21 +44,50 @@ function updateLoomUrl(player: Player) {
   }
 
   if (closestPlanet !== currentClosestPlanet) {
-    if (closestPlanet) {
-      closestPlanet.getNode().exportAsync({format: "PNG"}).then((planetImgArray: Uint8Array) => {
-        if (closestPlanet) {
-          figma.ui.resize(720, 80 + 360)
-          figma.ui.postMessage({embedUrl: closestPlanet.embedUrl, planetImgArray})
-        }
-      })
-    } else {
+    if (currentClosestPlanet) {
       currentClosestPlanet?.onLeave()
-      figma.ui.resize(300, 80)
-      figma.ui.postMessage({embedUrl: "", planetImgArray: []})
     }
 
     currentClosestPlanet = closestPlanet
+
+    if (currentClosestPlanet) {
+      currentClosestPlanet.getNode().exportAsync({format: "PNG"}).then((planetImgArray: Uint8Array) => {
+        resizeAnimation({x: 300, y: 80}, {x: 720, y: 80 + 360}, () => !!currentClosestPlanet, () => {
+          if (currentClosestPlanet) {
+            console.log("setting planet")
+            figma.ui.postMessage({embedUrl: currentClosestPlanet.embedUrl, planetImgArray})
+          }
+        })
+      })
+    } else {
+      resizeAnimation({x: 720, y: 80 + 360}, {x: 300, y: 80}, () => !currentClosestPlanet)
+      figma.ui.postMessage({embedUrl: "", planetImgArray: []})
+    }
+
   }
+}
+
+const NUM_ANIMATION_STEPS = 8
+function resizeAnimation(from: Vector, to: Vector, ifTrue: () => boolean, callback?: () => void) {
+  let steps: Vector[] = []
+  for (let i = 1; i <= NUM_ANIMATION_STEPS; i++) {
+    steps.push({
+      x: Math.floor((to.x - from.x) * (i / NUM_ANIMATION_STEPS) + from.x),
+      y: Math.floor((to.y - from.y) * (i / NUM_ANIMATION_STEPS) + from.y)
+    })
+  }
+
+  const resizeStep = () => {
+    const nextStep = steps.shift()
+    if (!nextStep || !ifTrue()) {
+      if (!nextStep) { callback?.()}
+      return
+    }
+    figma.ui.resize(nextStep?.x, nextStep.y)
+    setTimeout(resizeStep, 16)
+  }
+
+  resizeStep()
 }
 
 let previousRotation = 0

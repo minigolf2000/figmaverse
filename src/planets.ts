@@ -1,5 +1,5 @@
 import { Midpoint } from "./lib"
-import { BlackHole, GasGiant, OneillCylinder, Planet, WhiteHole } from "./planet"
+import { BlackHole, GasGiant, JamiesPlanet, OneillCylinder, Planet, WhiteHole } from "./planet"
 
 let a: Planets
 export function getPlanets() {
@@ -28,6 +28,8 @@ export class Planets {
         this.planets.push(new OneillCylinder(n))
       } else if (name.startsWith("🪐")) {
         this.planets.push(new Planet(n))
+      } else if (name.startsWith("⏩")) {
+        this.planets.push(new JamiesPlanet(n))
       }
     })
 

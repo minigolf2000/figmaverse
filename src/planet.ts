@@ -1,4 +1,4 @@
-import { Midpoint } from "./lib"
+import { Midpoint, setMaxSpeed, setThrustPower, thrustPower } from "./lib"
 import { Player } from "./player"
 import { setMagnitude, normalize, subtract, add, multiply } from "./vector"
 
@@ -80,8 +80,9 @@ export class Planet {
     const gravityVector = setMagnitude(normalize(subtract(this.getCurrentMidpoint(), p.getCurrentMidpoint())), this.gravity / (d * d))
     const newVelocity = add(p.getVelocity(), gravityVector)
     p.setVelocity(newVelocity)
-
   }
+
+  public onLeave() {}
 }
 
 export class WhiteHole extends Planet {
@@ -119,6 +120,16 @@ export class BlackHole extends Planet {
 
 const VISCOSITY = .9
 const BUOYANCY = .1
+export class JamiesPlanet extends Planet {
+  public onLeave() {
+    if (thrustPower < 0.5) {
+      figma.notify("🔬 Speedscope performance analysis completed, engine speed upgraded ⏩")
+      setThrustPower(0.5)
+      setMaxSpeed(10.0)
+    }
+  }
+}
+
 export class GasGiant extends Planet {
   public gravityDistanceThreshold() {
     return 2000

@@ -10,11 +10,8 @@ export async function regenerateShips() {
     shipFrameDuplicate.x += 100
 
     const hullNodes = shipFrameDuplicate.findChildren(c => c.name !== "🔥")
-    console.log("a", hullNodes, figma.currentPage)
     const hullGroup = figma.group(hullNodes, figma.currentPage)
-    console.log("b")
     const hullImage = await hullGroup.exportAsync({format: "PNG"})
-    console.log("c")
     const hullImageRect = figma.createRectangle()
     hullImageRect.fills = [{type: "IMAGE", scaleMode: "FILL", imageHash: figma.createImage(hullImage).hash}]
     hullGroup.remove()

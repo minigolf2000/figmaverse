@@ -98,9 +98,7 @@ onmessage = (event) => {
     }
   }
 
-  console.log(embedUrl, currentEmbedUrl)
   if (embedUrl !== undefined && embedUrl !== currentEmbedUrl) {
-    console.log("update")
     const iframe = document.getElementById("loom") as HTMLIFrameElement
     const loading = document.getElementById("loading") as HTMLDivElement
     iframe.src = embedUrl
@@ -110,15 +108,12 @@ onmessage = (event) => {
     } else {
       iframe.style.display = "block"
       loading.style.display = "flex"
+      // Do this to mask the janky iframe loading with something better
       setTimeout(() => loading.style.display = "none", 1000)
     }
 
     currentEmbedUrl = embedUrl
 
-    // const planetImg = document.getElementById("planetImg") as HTMLImageElement
-    // if (planetImg) {
-    //   planetImg.src = URL.createObjectURL(new Blob([planetImgArray], {type: 'image/png'}))
-    // }
     const planetImgs = document.getElementsByClassName("planet") as HTMLCollectionOf<HTMLImageElement>
     for (const p of planetImgs) {
       p.src = URL.createObjectURL(new Blob([planetImgArray], {type: 'image/png'}))

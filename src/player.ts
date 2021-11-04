@@ -1,4 +1,4 @@
-import { getWorldRectangle, loopAround } from "./lib"
+import { getWorldRectangle, loopAround, maxSpeed, thrustPower } from "./lib"
 import { Buttons } from "./buttons"
 import { Midpoint } from "./lib"
 import { add, distance, magnitude, setMagnitude, normalize } from "./vector"
@@ -6,9 +6,7 @@ import { getPlanets } from "./planets"
 import { getRelativeTransform } from "./matrix"
 import { isExited } from "./init"
 
-const MAX_SPEED = 5.0
 const TURN_SPEED = 6.0
-const THRUST_POWER = 0.25
 
 // Shrink diameters by this much for nicer looking hit detection
 const DIAMETER_LENIENCY = 4
@@ -94,7 +92,7 @@ export class Player {
 
     if (this.buttonsPressed.up) {
       const directionVector = {x: -Math.sin(this.currentMidpoint.rotation * Math.PI / 180), y: -Math.cos(this.currentMidpoint.rotation * Math.PI / 180)}
-      this.velocity = add(this.velocity, setMagnitude(directionVector, THRUST_POWER))
+      this.velocity = add(this.velocity, setMagnitude(directionVector, thrustPower))
       if (!isExited) {
         this.thrustNode.visible = !this.thrustLastFlickeredOn
       }
@@ -105,8 +103,8 @@ export class Player {
       }
     }
 
-    if (magnitude(this.velocity) > MAX_SPEED) {
-      this.velocity = setMagnitude(normalize(this.velocity), MAX_SPEED)
+    if (magnitude(this.velocity) > maxSpeed) {
+      this.velocity = setMagnitude(normalize(this.velocity), maxSpeed)
     }
 
     const newMidpoint = add({x: this.currentMidpoint.x, y: this.currentMidpoint.y}, this.velocity)

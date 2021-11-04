@@ -52,7 +52,8 @@ function updateLoomUrl(player: Player) {
         }
       })
     } else {
-      figma.ui.resize(400, 80)
+      currentClosestPlanet?.onLeave()
+      figma.ui.resize(300, 80)
       figma.ui.postMessage({embedUrl: "", planetImgArray: []})
     }
 

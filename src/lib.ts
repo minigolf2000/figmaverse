@@ -14,13 +14,19 @@ export function setMaxSpeed(s: number) {
 
 
 let worldRectangle: World
+let worldNode: FrameNode // use sparingly
 export function setWorldRectangle(w: FrameNode) {
   const {width, height, x, y} = w
   worldRectangle = {width, height, x, y}
+  worldNode = w
 }
 
 export function getWorldRectangle() {
   return worldRectangle
+}
+
+export function getWorldNode() {
+  return worldNode
 }
 
 let player: Player

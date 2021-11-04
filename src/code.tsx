@@ -1,5 +1,5 @@
 const { widget } = figma
-import { FPS, getMultiplayerPlayers, getPlayer, updateCamera } from './lib'
+import { FPS, getMultiplayerPlayers, getPlayer, getWorldNode, updateCamera } from './lib'
 import { Planet } from './planet'
 import { getPlanets } from './planets'
 import { Player } from './player'
@@ -28,6 +28,7 @@ function nextFrame() {
   if (player.buttonsPressed.left ||player.buttonsPressed.right ||player.buttonsPressed.up) {
     figma.viewport.zoom = .5
   }
+  lockFigmaverse()
 }
 
 let currentClosestPlanet: Planet | null = null
@@ -97,6 +98,17 @@ function updateRotationInIframe(player: Player) {
     figma.ui.postMessage({rotation: newRotation})
     previousRotation = newRotation
   }
+}
+
+let framesSinceLockFigmaverse = 10
+function lockFigmaverse() {
+  framesSinceLockFigmaverse--
+  if (framesSinceLockFigmaverse === 0) {
+    if (!getWorldNode().locked) {
+      getWorldNode().locked = true
+    }
+    framesSinceLockFigmaverse = 10
+    }
 }
 
 let lastFrameTimestamp: number = Date.now()

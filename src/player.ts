@@ -41,7 +41,7 @@ export class Player {
 
     const {x, y, width} = figma.currentPage.selection[0]
     this.node.x = x + width / 2 + positionOffset.x
-    this.node.y = y - 100 + positionOffset.y
+    this.node.y = y - 1300 + positionOffset.y
 
     this.currentMidpoint = {x: this.node.x - getWorldRectangle().x, y: this.node.y - getWorldRectangle().y, diameter: this.diameter, rotation: 0}
   }

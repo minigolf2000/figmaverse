@@ -32,7 +32,7 @@ function nextFrame() {
 }
 
 let currentClosestPlanet: Planet | null = null
-const VIDEO_DISTANCE_THRESHOLD = 400
+const VIDEO_DISTANCE_THRESHOLD = 600
 function updateLoomUrl(player: Player) {
   const playerMidpoint = player.getCurrentMidpoint()
   let closestPlanetDistance: number = Infinity

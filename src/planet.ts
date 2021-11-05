@@ -4,7 +4,7 @@ import { setMagnitude, normalize, subtract, add, multiply } from "./vector"
 
 
 // How much gravity planets have, directly correlated with diameter
-const GRAVITY_MULTIPLIER = 10
+const GRAVITY_MULTIPLIER = 20
 
 // Gravity applies at this many radiuses away from a planet
 const GRAVITY_DISTANCE_THRESHOLD = 5
@@ -27,7 +27,7 @@ export class Planet {
     this.gravity = this.currentMidpoint.diameter * GRAVITY_MULTIPLIER
 
     if ('children' in node) {
-      const textWithHyperlink = node.findChild(n => n.type === 'TEXT' && (n as any).hyperlink) as any
+      const textWithHyperlink = node.findOne(n => n.type === 'TEXT' && (n as any).hyperlink) as any
       if (textWithHyperlink?.type === "TEXT" && textWithHyperlink?.hyperlink.type === "URL") {
         this.embedUrl = textWithHyperlink.hyperlink.value
       }
@@ -96,7 +96,7 @@ export class WhiteHole extends Planet {
   }
 
   public gravityDistanceThreshold() {
-    return 1000
+    return 10000
   }
 }
 
@@ -117,7 +117,7 @@ export class BlackHole extends Planet {
   }
 
   public gravityDistanceThreshold() {
-    return 1000
+    return 10000
   }
 }
 
@@ -125,9 +125,9 @@ const VISCOSITY = .9
 const BUOYANCY = .1
 export class JamiesPlanet extends Planet {
   public onLeave() {
-    if (thrustPower < 0.5) {
+    if (thrustPower < 1.0) {
       figma.notify("🔬 Speedscope performance analysis completed, engine speed upgraded ⏩")
-      setThrustPower(0.5)
+      setThrustPower(1.0)
       setMaxSpeed(10.0)
     }
   }

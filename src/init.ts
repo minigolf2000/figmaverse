@@ -1,6 +1,6 @@
 import { Planets } from './planets'
 import { onButtonsPressed } from './buttons'
-import { getMultiplayerPlayers, getPlayer, getShipNodeFromIndex, setMultiplayerPlayers, setPlayer, setWorldRectangle } from './lib'
+import { getMultiplayerPlayers, getPlayer, getShipNodeFromIndex, setMultiplayerPlayers, setOcclusionNode, setPlayer, setWorldRectangle } from './lib'
 import { Player } from './player'
 import { ships } from './shipSvgs'
 
@@ -20,6 +20,7 @@ export function init(shipIndex: number) {
 
 
   new Planets(figmaverseFrame.children)
+  setOcclusionNode(figma.currentPage.findOne(n => n.name === 'Occlusion' && n.type === 'FRAME') as FrameNode)
   setWorldRectangle(figmaverseFrame)
   figma.showUI(__html__, {width: 300, height: 80, position: {x: -10000, y: -10000}})
   figma.viewport.zoom = .5

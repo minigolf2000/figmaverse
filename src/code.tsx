@@ -1,5 +1,5 @@
 const { widget } = figma
-import { FPS, getMultiplayerPlayers, getPlayer, getWorldNode, updateCamera } from './lib'
+import { FPS, getMultiplayerPlayers, getOcclusionNode, getPlayer, getWorldNode, updateCamera } from './lib'
 import { Planet } from './planet'
 import { getPlanets } from './planets'
 import { Player } from './player'
@@ -105,6 +105,9 @@ function lockFigmaverse() {
   if (framesSinceLockFigmaverse === 0) {
     if (!getWorldNode().locked) {
       getWorldNode().locked = true
+    }
+    if (!getOcclusionNode().locked) {
+      getOcclusionNode().locked = true
     }
     framesSinceLockFigmaverse = 10
     }

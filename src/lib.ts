@@ -29,6 +29,15 @@ export function getWorldNode() {
   return worldNode
 }
 
+let occlusionNode: FrameNode // use sparingly
+export function getOcclusionNode() {
+  return occlusionNode
+}
+
+export function setOcclusionNode(n: FrameNode) {
+  occlusionNode = n
+}
+
 let player: Player
 export function setPlayer(p: Player) {
   player = p

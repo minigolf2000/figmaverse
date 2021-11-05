@@ -29,7 +29,7 @@ export class Planet {
     if ('children' in node) {
       const textWithHyperlink = node.findOne(n => n.type === 'TEXT' && (n as any).hyperlink) as any
       if (textWithHyperlink?.type === "TEXT" && textWithHyperlink?.hyperlink.type === "URL") {
-        this.embedUrl = textWithHyperlink.hyperlink.value
+        this.embedUrl = textWithHyperlink.hyperlink.value + "?autoplay=1"
       }
     }
   }

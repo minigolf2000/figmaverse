@@ -55,7 +55,46 @@ body {
 }
 
 #ship {
+  height: 48px;
+  width: 48px;
+}
+
+#thrust, #no-thrust {
   object-fit: contain;
+  user-select: none;
+}
+
+#thrust {
+  position: absolute;
+  visibility: hidden;
+}
+
+#thrust {
+  -webkit-animation: flickerAnimation .05s infinite;
+  -moz-animation: flickerAnimation .05s infinite;
+  -o-animation: flickerAnimation .05s infinite;
+   animation: flickerAnimation .05s infinite;
+}
+
+@keyframes flickerAnimation {
+  0%   { opacity:1; }
+  50%  { opacity:0; }
+  100% { opacity:1; }
+}
+@-o-keyframes flickerAnimation{
+  0%   { opacity:1; }
+  50%  { opacity:0; }
+  100% { opacity:1; }
+}
+@-moz-keyframes flickerAnimation{
+  0%   { opacity:1; }
+  50%  { opacity:0; }
+  100% { opacity:1; }
+}
+@-webkit-keyframes flickerAnimation{
+  0%   { opacity:1; }
+  50%  { opacity:0; }
+  100% { opacity:1; }
 }
 
 #loading {

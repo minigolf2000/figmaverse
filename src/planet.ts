@@ -77,7 +77,10 @@ export class Planet {
   }
 
   private applyGravity(p: Player, d: number) {
-    const gravityVector = setMagnitude(normalize(subtract(this.getCurrentMidpoint(), p.getCurrentMidpoint())), this.gravity / (d * d))
+    let gravityVector = setMagnitude(normalize(subtract(this.getCurrentMidpoint(), p.getCurrentMidpoint())), this.gravity / (d * d))
+    if (gravityVector.x === NaN || gravityVector.y === NaN) {
+      gravityVector = {x: 0, y: 0}
+    }
     const newVelocity = add(p.getVelocity(), gravityVector)
     p.setVelocity(newVelocity)
   }

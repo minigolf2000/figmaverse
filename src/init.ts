@@ -7,7 +7,9 @@ import { ships } from './shipSvgs'
 export let isExited = false
 // Insert spaceship nodes on top of Figmaverse but beneath everything else
 const insertionIndex = 1
-
+function clone(val: any) {
+  return JSON.parse(JSON.stringify(val))
+}
 export function init(shipIndex: number) {
   if (!figma.currentUser?.id) { throw "Workshop mode users cannot run widgets" }
   const figmaverseFrame = figma.currentPage.findOne(n => n.name === 'Figmaverse' && n.type === 'FRAME') as FrameNode
@@ -30,7 +32,7 @@ export function init(shipIndex: number) {
     }
   }
   playerNode.setPluginData('user-id', figma.currentUser.id)
-  playerNode.exportAsync({format: "PNG"}).then(shipSvg => figma.ui.postMessage({shipSvg}))
+  postShipSvgToUI(playerNode)
 
   const player = new Player(playerNode)
   setPlayer(player)
@@ -63,4 +65,18 @@ export function init(shipIndex: number) {
     !getPlayer().getNode().removed && getPlayer().getNode().remove()
     getMultiplayerPlayers().forEach(p => !p.getNode().removed && p.getNode().remove())
   })
+}
+
+function postShipSvgToUI(playerNode: FrameNode) {
+  playerNode.exportAsync({format: "PNG"}).then(shipSvgThrust => figma.ui.postMessage({shipSvgThrust}))
+
+  const thrustNode = (playerNode.children[0] as RectangleNode)
+  if (thrustNode.fills !== figma.mixed) {
+    const oldFills = thrustNode.fills
+    const fills = clone(thrustNode.fills)
+    fills[0].opacity = 0.01
+    thrustNode.fills = fills
+    playerNode.exportAsync({format: "PNG"}).then(shipSvg => figma.ui.postMessage({shipSvg}))
+    thrustNode.fills = oldFills
+  }
 }

@@ -31,21 +31,19 @@ export class Player {
     })
 
     this.thrustNode = this.node.children[0]! as RectangleNode
-    this.thrustNode.visible = false
+    if (this.thrustNode.visible) this.thrustNode.visible = false
     this.node.clipsContent = false
     this.node.name = `🚀 ${figma.currentUser?.name}`
     this.node.locked = true
 
-    const { width, height } = getWorldRectangle()
     this.velocity = {x: 0, y: 0}
     this.node.rotation = 0
 
-    const {x, y} = figma.currentPage.selection[0]
-    // X and Y actually represent the top-left of the player's spaceship
-    this.node.x = width / 2 + Math.random() * 50 - 25 + positionOffset.x + x
-    // y position is purposefully moved 75px up so that plugin window starting position does not obscure ship
-    this.node.y = height / 2 + Math.random() * 25 - 100 + positionOffset.y + y - 100
-    this.currentMidpoint = {x: this.node.x, y: this.node.y, diameter: this.diameter, rotation: 0}
+    const {x, y, width} = figma.currentPage.selection[0]
+    this.node.x = x + width / 2 + positionOffset.x
+    this.node.y = y - 100 + positionOffset.y
+
+    this.currentMidpoint = {x: this.node.x - getWorldRectangle().x, y: this.node.y - getWorldRectangle().y, diameter: this.diameter, rotation: 0}
   }
 
   public getNode() {

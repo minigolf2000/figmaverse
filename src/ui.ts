@@ -1,6 +1,7 @@
 import './ui.css'
 
 const uiEl = document.getElementById('ui')!
+const thrustNode = document.getElementById("thrust")!
 uiEl.focus()
 uiEl.onkeydown = (e: KeyboardEvent) => {
   if (!e.repeat) {
@@ -15,6 +16,7 @@ uiEl.onkeydown = (e: KeyboardEvent) => {
       case 188: // ,
       case 38: // UP_ARROW
       case 87: // W
+        thrustNode.style.visibility = "visible"
         const up = document.getElementById("space") as HTMLElement
         const upSquare = document.getElementById("spaceSquare") as HTMLElement
         up.setAttribute('fill', '#2E2E2E')
@@ -51,6 +53,7 @@ uiEl.onkeyup = (e: KeyboardEvent) => {
     case 188: // ,
     case 38: // UP_ARROW
     case 87: // W
+      thrustNode.style.visibility = "hidden"
       const up = document.getElementById("space") as HTMLElement
       const upSquare = document.getElementById("spaceSquare") as HTMLElement
       up.setAttribute('fill', 'white')
@@ -82,19 +85,31 @@ uiEl.onfocus = () => {
 let currentEmbedUrl = ""
 onmessage = (event) => {
   if (!event.data.pluginMessage) { return }
-  const { shipSvg, rotation, embedUrl, planetImgArray } = event.data.pluginMessage
+  const { shipSvg, shipSvgThrust, rotation, embedUrl, planetImgArray } = event.data.pluginMessage
 
   if (rotation !== undefined) {
-    const shipNode = document.getElementById("ship")
+    const shipNode = document.getElementById("no-thrust")
+    const shipNodeThrust = document.getElementById("thrust")
     if (shipNode) {
       shipNode.style.transform = `rotate(-${rotation}deg)`
+    }
+    if (shipNodeThrust) {
+      shipNodeThrust.style.transform = `rotate(-${rotation}deg)`
     }
   }
 
   if (shipSvg !== undefined) {
-    const shipNode = document.getElementById("ship") as HTMLImageElement
+    const shipNode = document.getElementById("no-thrust") as HTMLImageElement
     if (shipNode) {
+      console.log("setting thrust")
       shipNode.src = URL.createObjectURL(new Blob([shipSvg], {type: 'image/png'}))
+    }
+  }
+
+  if (shipSvgThrust !== undefined) {
+    const shipNodeThrust = document.getElementById("thrust") as HTMLImageElement
+    if (shipNodeThrust) {
+      shipNodeThrust.src = URL.createObjectURL(new Blob([shipSvgThrust], {type: 'image/png'}))
     }
   }
 

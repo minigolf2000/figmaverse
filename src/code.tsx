@@ -55,7 +55,6 @@ function updateLoomUrl(player: Player) {
       currentClosestPlanet.getNode().exportAsync({format: "PNG"}).then((planetImgArray: Uint8Array) => {
         resizeAnimation({x: 300, y: 80}, {x: 720, y: 80 + 360}, () => !!currentClosestPlanet, () => {
           if (currentClosestPlanet) {
-            console.log("setting planet")
             figma.ui.postMessage({embedUrl: currentClosestPlanet.embedUrl, planetImgArray})
           }
         })

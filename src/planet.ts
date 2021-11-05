@@ -92,11 +92,11 @@ export class WhiteHole extends Planet {
   public constructor(node: SceneNode) {
     super(node)
     this.currentMidpoint.diameter = 0
-    this.gravity = -1000 * GRAVITY_MULTIPLIER
+    this.gravity = -6000 * GRAVITY_MULTIPLIER
   }
 
   public gravityDistanceThreshold() {
-    return 10000
+    return 20000
   }
 }
 
@@ -104,7 +104,7 @@ export class BlackHole extends Planet {
   private exit: Midpoint
   public constructor(node: SceneNode) {
     super(node)
-    this.gravity = 400 * GRAVITY_MULTIPLIER
+    this.gravity = 6000 * GRAVITY_MULTIPLIER
   }
 
   public setExit(e: Midpoint) {
@@ -117,7 +117,7 @@ export class BlackHole extends Planet {
   }
 
   public gravityDistanceThreshold() {
-    return 10000
+    return 30000
   }
 }
 
@@ -125,10 +125,10 @@ const VISCOSITY = .9
 const BUOYANCY = .1
 export class JamiesPlanet extends Planet {
   public onLeave() {
-    if (thrustPower < 1.0) {
+    if (thrustPower < 2.0) {
       figma.notify("🔬 Speedscope performance analysis completed, engine speed upgraded ⏩")
-      setThrustPower(1.0)
-      setMaxSpeed(10.0)
+      setThrustPower(2.0)
+      setMaxSpeed(20.0)
     }
   }
 }

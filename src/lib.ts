@@ -2,12 +2,12 @@ import { Player } from "./player"
 import { distance } from "./vector"
 
 export const FPS = 30
-export let thrustPower = 0.5
+export let thrustPower = 1
 export function setThrustPower(p: number) {
   thrustPower = p
 }
 
-export let maxSpeed = 5.0
+export let maxSpeed = 10.0
 export function setMaxSpeed(s: number) {
   maxSpeed = s
 }
